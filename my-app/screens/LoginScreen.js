@@ -4,43 +4,85 @@ import {Image} from 'react-native';
 import { auth } from '../firebase';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('user');
     const fireAuth = auth;
     const navigation = useNavigation()
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-            if(user) {
-                navigation.replace('Home');
+            if (user) {
+                if (user.email === 'admin@example.com') {
+                    navigation.replace('AdminHome');
+                } else {
+                    navigation.replace('Home');
+                }
             }
         })
         return unsubscribe
     }, [])
+    
 
-    const handlueSignUp = () => {
-        createUserWithEmailAndPassword(fireAuth, email, password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            console.log(user);
-        })
-        .catch(error => {
-            alert(error.message);
-        })
+    const handleSignUp = () => {
+        if (role === 'user') {
+            createUserWithEmailAndPassword(fireAuth, email, password)
+            .then(userCredentials => {
+                const user = userCredentials.user;
+                console.log(user);
+            })
+            .catch(error => {
+                alert(error.message);
+            })
+        } else if (role === 'admin') {
+            // add admin authentication code here
+            signInWithEmailAndPassword(fireAuth, 'admin@example.com', 'admin123')
+            .then(userCredentials => {
+              const user = userCredentials.user;
+              if (user) {
+                // Set isAdmin property to true in user object
+                user.isAdmin = true;
+                // Navigate to admin home screen
+                navigation.replace('AdminHome');
+              }
+            })
+            .catch(error => {
+              alert(error.message);
+            })
+        }
     }
 
     const handleLogin = () => {
-        signInWithEmailAndPassword(fireAuth, email, password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            console.log('Logged in with : ' + user.email);
-        })
-        .catch(error => {
-            alert(error.message);
-        })
-    }
+        if (role === 'user') {
+          signInWithEmailAndPassword(fireAuth, email, password)
+            .then(userCredentials => {
+              const user = userCredentials.user;
+              console.log('Logged in with : ' + user.email);
+            })
+            .catch(error => {
+              alert(error.message);
+            })
+        } else if (role === 'admin') {
+          const adminEmail = 'admin@example.com';
+          const adminPassword = 'admin123';
+          signInWithEmailAndPassword(fireAuth, adminEmail, adminPassword)
+            .then(userCredentials => {
+              const user = userCredentials.user;
+              if (user) {
+                // set isAdmin property to true in user object
+                user.isAdmin = true;
+              }
+              console.log('Logged in as admin');
+            })
+            .catch(error => {
+              alert(error.message);
+            })
+        }
+      }
+      
 
   return (
     <KeyboardAvoidingView
@@ -60,6 +102,7 @@ const LoginScreen = () => {
                 secureTextEntry
                 onChangeText={text => {setPassword(text)}}
                 style={styles.input} />
+            
         </View>
 
         <View
@@ -73,7 +116,7 @@ const LoginScreen = () => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-            onPress={handlueSignUp}
+            onPress={handleSignUp}
             style={[styles.button, styles.buttonOutline]}>
                 <Text style={styles.buttonOutlineText}>
                     Register
@@ -85,6 +128,7 @@ const LoginScreen = () => {
 }
 
 export default LoginScreen
+
 
 //styles
 const styles = StyleSheet.create({
