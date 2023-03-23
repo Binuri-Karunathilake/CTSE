@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+import { ActivityIndicator, RadioButton } from 'react-native-paper';
 import { FontAwesome5 } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
+import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { fireStoreDB, storage } from '../firebase';
+import { async } from '@firebase/util';
+import { set } from 'react-native-reanimated';
+import { addDoc, collection } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
 const genders = [
   { label: 'Male', value: 'male' },
@@ -20,6 +26,9 @@ const AdminAddNewProduct = () => {
   const [type, setType] = useState();
   const [image, setImage] = useState(null);
   const [uploading, setuploading] = useState(false);
+  const [uploaded, setuploaded] = useState(false);
+
+  const navigation = useNavigation();
   
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -31,18 +40,59 @@ const AdminAddNewProduct = () => {
 
     const source = {uri: result.uri};
     console.log(source);
-    setImage(source);
+    setImage(source.uri);
   }
 
-  const uploadImage = async () => {
+  const uploadImage = async (uri) => {
     setuploading(true);
-    const response = await fetch(image.uri)
-    const blob = await response.blob();
-    const fileName = image.uri.substring(image.uri.lasIndexOf('/') + 1);
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    try {
+      const fileRef = ref(storage, `image-${Date.now()}`);
+      const result = await uploadBytes(fileRef, blob);
+      blob.close();
+      return await getDownloadURL(fileRef);
+    } catch (error) {
+      alert(error.message);
+    }
   }
 
-  const handleSubmit = () => {
-    onSubmit({ name, brand, price, gender, description });
+  const handleDelete = async () => {
+    setuploading(true);
+    const delRef = ref(storage, image);
+    try {
+      await deleteObject(delRef);
+      setInterval(() => {
+        setImage(null);
+        setuploaded(false);
+        setuploading(false);
+      }, 200);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  const handleUpload = async () => {
+    const imgRef = await uploadImage(image);
+    setImage(imgRef);
+    setuploading(false)
+    setuploaded(true)
+  }
+
+  const handleSubmit = async () => {
+    await onSubmit({ name, brand, price, gender, description });
     setName('');
     setBrand('');
     setPrice('');
@@ -50,8 +100,25 @@ const AdminAddNewProduct = () => {
     setDescription('');
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log({name, brand, price, gender, description});
+    try {
+        const docRef = await addDoc(collection(fireStoreDB, "products"), 
+        {
+          image: image,
+          name: name,
+          id: Date.now(),
+          stauts: 'available',
+          type: type,
+          description: description,
+          gender: gender,
+          brand: brand,
+        });
+        console.log("Document written with ID: ", docRef.id);
+        navigation.navigate('Home');
+    } catch (error) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
@@ -85,7 +152,7 @@ const AdminAddNewProduct = () => {
               value={item.value}
               status={gender === item.value ? 'checked' : 'unchecked'}
               onPress={() => setGender(item.value)}
-              color="#007bff"
+              color="#2b6777"
             />
             <Text style={styles.radioLabel}>{item.label}</Text>
           </View>
@@ -107,14 +174,21 @@ const AdminAddNewProduct = () => {
       
         {image && (
           <View style={styles.addImage}>
-            <Image source={{uri: image.uri}} style={{width: 200, height: 200}} />
+            <Image source={{uri: image}} style={{width: 200, height: 200}} />
             <View>
-            <TouchableOpacity style={styles.buttonUpload} onPress={pickImage}>
+            <TouchableOpacity style={styles.buttonUpload} onPress={handleUpload}>
               <Text style={styles.buttonText1}>Upload</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonClear} onPress={()=> {setImage(null)}}>
+            {uploading? (<ActivityIndicator size="small" color="#0000ff" />) : ''}
+            {uploaded? (
+              <TouchableOpacity style={styles.buttonClear} onPress={handleDelete}>
+              <Text style={styles.buttonText1}>Delete</Text>
+            </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.buttonClear} onPress={()=> {setImage(null)}}>
               <Text style={styles.buttonText1}>Clear</Text>
             </TouchableOpacity>
+            )}
             </View>
           </View>
           )}
@@ -131,9 +205,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: '#f7f7f7',
-    borderRadius: 10,
-    marginVertical: 10,
+    backgroundColor: '#f2f2f2',
   },
   addImage: {
     flexDirection: 'row',
@@ -143,7 +215,7 @@ const styles = StyleSheet.create({
     
   },
   buttonAdd: {
-    borderColor: '#9377d9',
+    borderColor: '#2b6777',
     borderWidth: 1,
     padding: 5,
     borderRadius: 10,
@@ -173,7 +245,7 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
   buttonText2: {
-    color: '#9377d9',
+    color: '#2b6777',
     fontSize: 15,
     textAlign: 'center',
     fontWeight: '500'
@@ -223,7 +295,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   button: {
-    backgroundColor: '#9377d9',
+    backgroundColor: '#2b6777',
     padding: 12,
     borderRadius: 10,
     marginBottom: 30

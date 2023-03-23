@@ -129,17 +129,20 @@
 // export default AdminProductPage;
 
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const AdminProductPage = (props) => {
+const AdminProductPage = ({route}) => {
+  const {item} = route.params;
+  console.log(item);
      const product = {
         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
         name: 'My Skincare Product',
-        price: '$24.99',
+        price: 24.99,
         type: 'Moisturizer',
         gender: 'Unisex',
         brand: 'My Brand',
         description: 'This is a description of my skincare product.',
+        status: 'available'
       };
   const [isEditing, setIsEditing] = useState(false);
   
@@ -152,25 +155,96 @@ const AdminProductPage = (props) => {
   }
   
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <Image
-        source={{ uri: product.image }}
-        style={{ height: 350, width: '100%', borderRadius: 5 }}
-      />
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10 }}>{product.name}</Text>
-      <Text style={{ fontSize: 16, color: 'grey', marginTop: 5 }}>{product.type} - {product.gender}</Text>
-      <Text style={{ fontSize: 18, marginTop: 10 }}>Price: {product.price}</Text>
-      <Text style={{ fontSize: 18, marginTop: 10 }}>{product.description}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-        <TouchableOpacity onPress={handleEdit} style={{ backgroundColor: '#4287f5', padding: 10, borderRadius: 5 }}>
-          <Text style={{ color: 'white', fontSize: 16 }}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleDelete} style={{ backgroundColor: 'red', padding: 10, borderRadius: 5 }}>
-          <Text style={{ color: 'white', fontSize: 16 }}>Delete</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+    <Image source={{ uri: item.image }} style={styles.image} />
+    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <Text style={styles.title}>{item.name}</Text>
+      <Text style={item.status === "available" ? styles.subtitleAvailable : styles.subtitleOut}>{item.status}</Text>
     </View>
+    <Text style={styles.subtitle}>{item.type} - {item.gender}</Text>
+    <Text style={styles.price}>Rs.{item.price}</Text>
+    <Text style={styles.description}>{item.description}</Text>
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity onPress={handleEdit} style={styles.editButton}>
+        <Text style={styles.buttonText}>Edit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
+        <Text style={styles.buttonText}>Delete</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  image: {
+    height: 350,
+    width: '100%',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'grey',
+    marginBottom: 10,
+  },
+  subtitleAvailable: {
+    fontSize: 16,
+    color: '#52ab98',
+    marginBottom: 10,
+    fontWeight: '500',
+    marginRight: 10,
+  },
+  subtitleOut: {
+    fontSize: 16,
+    color: '#b5443c',
+    marginBottom: 10,
+    fontWeight: '500',
+    marginRight: 10,
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 10,
+    width: '100%',
+  },
+  editButton: {
+    backgroundColor: '#2b6777',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginHorizontal: 20
+  },
+  deleteButton: {
+    backgroundColor: '#b5443c',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginHorizontal: 20
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+});
 
 export default AdminProductPage;

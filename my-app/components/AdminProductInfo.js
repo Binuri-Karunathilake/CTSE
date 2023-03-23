@@ -1,10 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 const AdminProductInfo = ({ item }) => {
-    console.log("Hellooo-");
+
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("Admin Product Details", {item})}}>
       <View style={styles.imageContainer}>
         <Image source={require('../assets/icon.png')} style={styles.image} />
       </View>
@@ -13,7 +16,7 @@ const AdminProductInfo = ({ item }) => {
         <Text style={styles.price}>${item.price}</Text>
         <Text style={styles.description}>{item.description}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

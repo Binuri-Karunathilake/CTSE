@@ -5,40 +5,48 @@ import AdminProductInfo from '../components/AdminProductInfo';
 
 const PRODUCTS = [
   {
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
     id: 1,
     name: 'Product 1',
     brand: 'Brand A',
-    price: '10.00',
+    price: 10.00,
     gender: 'male',
     description: 'Product 1 description',
-    type: 'Skin'
+    type: 'Skin',
+    status: 'available'
   },
   {
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
     id: 2,
     name: 'Product 2',
     brand: 'Brand B',
-    price: '20.00',
+    price: 20.00,
     gender: 'female',
     description: 'Product 2 description',
-    type: 'Hair'
+    type: 'Hair',
+    status: 'out of stock',
   },
   {
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
     id: 3,
     name: 'Product 3',
     brand: 'Brand C',
-    price: '30.00',
+    price: 30.00,
     gender: 'both',
     description: 'Product 3 description',
-    type: 'Skin'
+    type: 'Skin',
+    status: 'available'
   },
   {
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
     id: 4,
     name: 'Product 4',
     brand: 'Brand C',
-    price: '50.00',
+    price: 50.00,
     gender: 'male',
     description: 'Product 3 description',
-    type: 'Perfume'
+    type: 'Perfume',
+    status: 'out of stock',
   },
 ];
 
@@ -123,6 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginBottom: 16,
+    backgroundColor: '#fff'
   },
   productContainer: {
     backgroundColor: '#fff',
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   btnTabActive: {
-    backgroundColor: '#a77bc9'
+    backgroundColor: '#2b6777'
   },
   btnTabActiveText: {
     color: 'white',

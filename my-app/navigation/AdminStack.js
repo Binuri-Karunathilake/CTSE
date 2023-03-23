@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator();
 
 const AdminStack = () => {
   return (
-    <Drawer.Navigator screenOptions={{drawerLabelStyle: {marginLeft: -25, fontFamily: '', fontSize: 15}, drawerActiveBackgroundColor: '#9377d9', drawerActiveTintColor: '#fff', drawerInactiveTintColor: '#333'}} drawerContent={props => <CustomDrawer {...props}  /> }  >
+    <Drawer.Navigator screenOptions={{drawerLabelStyle: {marginLeft: -25, fontFamily: '', fontSize: 15}, drawerActiveBackgroundColor: '#2b6777', drawerActiveTintColor: '#fff', drawerInactiveTintColor: '#333'}} drawerContent={props => <CustomDrawer {...props}  /> }  >
         <Drawer.Screen name='Home' component={AdminViewProductList} 
         options={{
           drawerIcon: ({color}) => (
@@ -31,7 +31,9 @@ const AdminStack = () => {
             <FontAwesome5 name='users-cog' size={20} color={color} />
           )
         }} />
-        <Drawer.Screen name='Admin Product Details' component={AdminProductPage} screenOptions={{drawerItemStyle: {height: 0}}}/>
+        <Drawer.Screen name='Admin Product Details' component={AdminProductPage} options={{
+                  drawerItemStyle: { display: 'none' }
+        }}/>
     </Drawer.Navigator>
   )
 }

@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 const CustomDrawer = (props) => {
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: "#c8d8e4"}}>
         <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContent}>
             <ImageBackground source={require("../assets/icon.png")} style={{padding: 20, marginBottom: 15}} >
                 <Image source={require("../assets/Welcome.jpg")} style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}} />
@@ -30,12 +30,13 @@ export default CustomDrawer
 
 const styles = StyleSheet.create({
     drawerContent: {
-        backgroundColor: "#ffff",
+        backgroundColor: "#c8d8e4",
+        // #f2f2f2
     },
     bottumDrawerView: {
         padding: 20,
         borderTopWidth: 1,
-        borderTopColor: '#ccc'
+        borderTopColor: '#2b6777'
     },
     drawerButton: {
         paddingVertical: 15
