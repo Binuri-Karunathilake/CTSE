@@ -20,12 +20,15 @@ export default function App() {
         style={styles.image}
         source={{
           uri:
-            'https://img.freepik.com/premium-photo/empty-white-packaging-tube-beauty-spa-medical-skin-care-cosmetic-lotion-cream-packaging-face-wash-foam-product-design-layout-pink-background_615536-378.jpg?w=900',
+            'https://static.thcdn.com/images/large/webp//productimg/1600/1600/13806351-6474952929341174.jpg',
         }}
       />
       <Text style={styles.productName}>Color Wow Dream Clean </Text>
       <Text style={styles.productDescription}>
         A vibrance-boosting haircare bundle featuring a shampoo and conditioner.
+      
+      
+      
       </Text>
       <Text style={styles.productPrice}>LKR 8,486.45</Text>
       <Button
@@ -60,10 +63,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#ffffff'
+
   },
   productDescription: {
     fontSize: 16,
     marginBottom: 10,
+    color: '#c8d8e4'
+
   },
   productPrice: {
     fontSize: 20,
