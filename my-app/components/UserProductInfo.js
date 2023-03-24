@@ -7,7 +7,7 @@ const UserProductInfo = ({ item }) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("Admin Product Details", {item})}}>
+    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("AddShippingDetails", {item})}}>
       <View style={styles.imageContainer}>
         <Image source={require('../assets/kk.png')} style={styles.image} />
       </View>
