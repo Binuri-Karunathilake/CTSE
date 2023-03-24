@@ -1,11 +1,12 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import {Image} from 'react-native';
-import { auth } from '../firebase';
+import { auth, fireStoreDB } from '../firebase';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { firebase } from '../firebase'
+import { addDoc, collection } from '@firebase/firestore';
 
 
 
@@ -18,37 +19,55 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState('');
 
     const navigation = useNavigation()
+    const user = auth.currentUser;
 
 
     registerUser = async (fName, Lname, email, phoneNumber, password) => {
-        await firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(() => {
-            firebase.auth().currentUser.sendEmailVerification({
-              handleCodeInApp: true,
-              url: 'https://reactapp-cea8f.firebaseapp.com',
-            })
-              .then(() => {
-                alert('Verification email sent')
-              }).catch((error) => {
-                alert(error.message)
-              })
-              .then(() => {
-                firebase.firestore().collection('users')
-                  .doc(firebase.auth().currentUser.uid)
-                  .set({
-                    fName,
-                    Lname,
-                    email,
-                    phoneNumber,
-                  })
-              })
-              .catch((error) => {
-                alert(error.message)
-              })
-          })
-          .catch((error => {
-            alert(error.message)
-          }))
+        // await firebase.auth().createUserWithEmailAndPassword(email, password)
+        //   .then(() => {
+        //     firebase.auth().currentUser.sendEmailVerification({
+        //       handleCodeInApp: true,
+        //       url: 'https://reactapp-cea8f.firebaseapp.com',
+        //     })
+        //       .then(() => {
+        //         alert('Verification email sent')
+        //       }).catch((error) => {
+        //         alert(error.message)
+        //       })
+        //       .then(() => {
+        //         firebase.firestore().collection('users')
+        //           .doc(firebase.auth().currentUser.uid)
+        //           .set({
+        //             fName,
+        //             Lname,
+        //             email,
+        //             phoneNumber,
+        //           })
+        //       })
+        //       .catch((error) => {
+        //         alert(error.message)
+        //       })
+        //   })
+        //   .catch((error => {
+        //     alert(error.message)
+        //   }))
+        try {
+          const regUser = await createUserWithEmailAndPassword(auth, email, password)
+          console.log(regUser.user.uid);
+          const docRef = await addDoc(collection(fireStoreDB, "users"), 
+          {
+            userId: regUser.user.uid,
+            fName,
+            Lname,
+            email,
+            phoneNumber,
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (error) {
+          alert(error.message);
+        }
+        
+
       }
     
 
@@ -155,7 +174,8 @@ const RegisterScreen = () => {
         <TextInput
                 placeholder='Phone Number'
                 value={phoneNumber}
-                onChangephoneNumber={phoneNumber => {setphoneNumber(phoneNumber)}}
+                keyboardType='number-pad'
+                onChangeText={phoneNumber => {setphoneNumber(phoneNumber)}}
                 autoCorrect={false}
                 style={styles.input} />
 

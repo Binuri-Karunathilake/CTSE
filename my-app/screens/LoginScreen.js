@@ -2,7 +2,8 @@ import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, Vi
 import React, { useEffect, useState } from 'react';
 import {Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { firebase } from '../firebase'
+import { auth, firebase } from '../firebase'
+import { onAuthStateChanged, signInWithEmailAndPassword } from '@firebase/auth';
 
 
 // const LoginScreen = () => {
@@ -88,32 +89,53 @@ const LoginScreen = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState(false);
 
     const loginUser = async (email, password) => {
-        try {
-            const adminEmail = 'admin@123.com';
-            const adminPassword = 'admin123';
-            if (email === adminEmail && password === adminPassword) {
-                // Navigate to admin page
-                navigation.navigate('AdminHomeScreen');
-            } else {
-                await firebase.auth().signInWithEmailAndPassword(email, password);
-                // Navigate to user page
-                navigation.navigate('Home');
+        signInWithEmailAndPassword(auth, email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            if(email === "admin@123.com") {
+                setUserType(true)
             }
-        } catch (error) {
+            console.log('Logged in with : ' + user.email);
+        })
+        .catch(error => {
             alert(error.message);
-        }
+        })
     };
-    
-    const forgetPassword = () =>{
-        firebase.auth().sendPasswordResetEmail(email)
-        .then(() => {
-            alert("Password reset email sent")
-        }).catch((error) => {
-            alert(error)
+
+    const handlueSignUp = () => {
+        createUserWithEmailAndPassword(fireAuth, email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log(user);
+        })
+        .catch(error => {
+            alert(error.message);
         })
     }
+    
+    const forgetPassword = () =>{
+        // firebase.auth().sendPasswordResetEmail(email)
+        // .then(() => {
+        //     alert("Password reset email sent")
+        // }).catch((error) => {
+        //     alert(error)
+        // })
+    }
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if(user && userType) {
+                navigation.replace('AdminStack');
+            } 
+            else if (user) {
+                navigation.replace('Home')
+            }
+        })
+        return unsubscribe;
+    }, [])
 
     return (
         <KeyboardAvoidingView

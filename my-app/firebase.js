@@ -25,11 +25,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig);
-}
-
-// const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 
 // Initialize Firebase Authentication and get a reference to the service
