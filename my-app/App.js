@@ -15,7 +15,14 @@ import AdminProductPage from './screens/AdminProductPage';
 export default function App() {
   return (
     <NavigationContainer>
-      <AdminStack/>
+      <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+          name="AdminStack"
+          component={AdminStack}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

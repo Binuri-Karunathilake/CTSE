@@ -1,54 +1,9 @@
-import React, { useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, TextInput, View, StyleSheet, Dimensions, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AdminProductInfo from '../components/AdminProductInfo';
-
-const PRODUCTS = [
-  {
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
-    id: 1,
-    name: 'Product 1',
-    brand: 'Brand A',
-    price: 10.00,
-    gender: 'male',
-    description: 'Product 1 description',
-    type: 'Skin',
-    status: 'available'
-  },
-  {
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
-    id: 2,
-    name: 'Product 2',
-    brand: 'Brand B',
-    price: 20.00,
-    gender: 'female',
-    description: 'Product 2 description',
-    type: 'Hair',
-    status: 'out of stock',
-  },
-  {
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
-    id: 3,
-    name: 'Product 3',
-    brand: 'Brand C',
-    price: 30.00,
-    gender: 'both',
-    description: 'Product 3 description',
-    type: 'Skin',
-    status: 'available'
-  },
-  {
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
-    id: 4,
-    name: 'Product 4',
-    brand: 'Brand C',
-    price: 50.00,
-    gender: 'male',
-    description: 'Product 3 description',
-    type: 'Perfume',
-    status: 'out of stock',
-  },
-];
+import { fireStoreDB } from '../firebase';
 
 const statuses = [
   {status: 'All', key: 1},
@@ -60,14 +15,8 @@ const statuses = [
 const AdminViewProductList = () => {
   const [searchText, setSearchText] = useState('');
   const [type, setType] = useState('All');
-  const [products, setProducts] = useState(PRODUCTS);
-
-  const fiterProducts = (status) => {
-    if(status !== 'All') {
-      setProducts([])
-    }
-    setProducts()
-  }
+  const [products, setProducts] = useState([]);
+  // const [filteredProducts, setFilteredProducts] = useState()
 
   const renderProduct = ({ item }) => {
     return (
@@ -84,13 +33,32 @@ const AdminViewProductList = () => {
     );
   };
 
-  const filteredProducts = PRODUCTS.filter((product) => {
-    if(type === 'All') {
-      return product.name.toLowerCase().includes(searchText.toLowerCase());
-    } else {
-      return product.name.toLowerCase().includes(searchText.toLowerCase()) && product.type.toLowerCase().includes(type.toLowerCase());
-    }
-  });
+
+  const filteredProducts = products.filter((product) => {
+      if(type === 'All') {
+        return product.data.name.toLowerCase().includes(searchText.toLowerCase());
+      } else {
+        return product.data.name.toLowerCase().includes(searchText.toLowerCase()) && product.data.type.toLowerCase().includes(type.toLowerCase());
+      }
+    });
+
+  const getProducts = async () => {
+    const productRef = collection(fireStoreDB, "products");
+    // Create a query against the collection.
+      const querySnapshot = await getDocs(productRef);
+      let returnedProducts = [];
+      querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+        returnedProducts.push({id: doc.id, data: doc.data()});
+      });
+      console.log(returnedProducts);
+      setProducts(returnedProducts)
+      console.log(products);
+  }
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -109,9 +77,10 @@ const AdminViewProductList = () => {
       </View>
       <FlatList
         data={filteredProducts}
+        extraData={filteredProducts}
         renderItem={({item, index}) => {
           console.log(item);
-          return(<AdminProductInfo item={item}/>)
+          return(<AdminProductInfo item={item.data} id={item.id}/>)
         }}
         keyExtractor={(item) => item.id.toString()}
       />

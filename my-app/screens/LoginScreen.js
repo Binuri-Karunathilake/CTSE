@@ -9,12 +9,12 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const fireAuth = auth;
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
             if(user) {
-                navigation.replace('Home');
+                navigation.replace('AdminStack');
             }
         })
         return unsubscribe

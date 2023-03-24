@@ -2,18 +2,21 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const AdminProductInfo = ({ item }) => {
+const AdminProductInfo = ({ item, id }) => {
 
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("Admin Product Details", {item})}}>
+    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("Admin Product Details", {item, id})}}>
       <View style={styles.imageContainer}>
-        <Image source={require('../assets/icon.png')} style={styles.image} />
+        <Image source={{uri: item.image}} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.price}>${item.price}</Text>
+        <Text style={[styles.subtitleAvailable, item.status === 'Available'? {color: '#52ab98'} : {color: '#b5443c'} ]}>{item.status}</Text>
+        </View>
+        <Text style={styles.price}>Rs.{item.price}</Text>
         <Text style={styles.description}>{item.description}</Text>
       </View>
     </TouchableOpacity>
@@ -31,6 +34,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     marginVertical: 5,
     borderRadius: 10,
+  },
+  subtitleAvailable: {
+    fontSize: 12,
+    marginBottom: 10,
+    fontWeight: '500',
+    marginRight: 10,
   },
   imageContainer: {
     width: 80,

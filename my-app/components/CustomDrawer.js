@@ -3,8 +3,10 @@ import React from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 const CustomDrawer = (props) => {
+    const navigation = useNavigation();
   return (
     <View style={{flex: 1, backgroundColor: "#c8d8e4"}}>
         <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContent}>
@@ -15,7 +17,7 @@ const CustomDrawer = (props) => {
             <DrawerItemList {...props}/>
         </DrawerContentScrollView>
         <View style={styles.bottumDrawerView}>
-            <TouchableOpacity onPress={() => {}} style={styles.drawerButton}>
+            <TouchableOpacity onPress={() => {navigation.navigate('Login')}} style={styles.drawerButton}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name='exit-outline' size={22}/>
                     <Text style={styles.bottonButtonText}>Sign Out</Text>

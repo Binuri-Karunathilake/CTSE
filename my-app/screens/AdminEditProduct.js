@@ -8,7 +8,7 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage
 import { fireStoreDB, storage } from '../firebase';
 import { async } from '@firebase/util';
 import { set } from 'react-native-reanimated';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 const genders = [
@@ -17,16 +17,21 @@ const genders = [
   { label: 'Both', value: 'both' },
 ];
 
-const AdminAddNewProduct = () => {
-  const [name, setName] = useState('');
-  const [brand, setBrand] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
-  const [gender, setGender] = useState('both');
-  const [type, setType] = useState();
-  const [image, setImage] = useState(null);
+const AdminEditProduct = ({route}) => {
+    
+const {item, id} = route.params;
+console.log(id);
+console.log(item);
+  const [name, setName] = useState(item.name);
+  const [brand, setBrand] = useState(item.brand);
+  const [price, setPrice] = useState(item.price);
+  const [description, setDescription] = useState(item.description);
+  const [gender, setGender] = useState(item.gender);
+  const [type, setType] = useState(item.type);
+  const [image, setImage] = useState(item.image);
+  const [status, setStatus] = useState(item.status);
   const [uploading, setuploading] = useState(false);
-  const [uploaded, setuploaded] = useState(false);
+  const [uploaded, setuploaded] = useState(true);
 
   const navigation = useNavigation();
   
@@ -45,7 +50,7 @@ const AdminAddNewProduct = () => {
 
   const uploadImage = async (uri) => {
     setuploading(true);
-    //taken from expo fire storage example given in the documentation
+    //taken from expo fire storage example given in documentation
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -75,9 +80,10 @@ const AdminAddNewProduct = () => {
     const delRef = ref(storage, image);
     try {
       await deleteObject(delRef);
-      setImage(null);
-      setuploaded(false);
-      setuploading(false);
+    setImage(null);
+    setuploaded(false);
+    setuploading(false);
+
     } catch (error) {
       alert(error.message);
     }
@@ -102,19 +108,18 @@ const AdminAddNewProduct = () => {
   const onSubmit = async () => {
     console.log({name, brand, price, gender, description});
     try {
-        const docRef = await addDoc(collection(fireStoreDB, "products"), 
+        const docRef = await updateDoc(doc(fireStoreDB, "products", id), 
         {
           image: image,
           price: price,
           name: name,
-          id: Date.now(),
-          status: 'Available',
+          status: status,
           type: type,
           description: description,
           gender: gender,
           brand: brand,
         });
-        console.log("Document written with ID: ", docRef.id);
+        console.log("Document edited");
         navigation.navigate('AdminViewProductList');
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -132,7 +137,7 @@ const AdminAddNewProduct = () => {
       <Text style={styles.label}>Brand:</Text>
       <TextInput style={styles.input} value={brand} onChangeText={setBrand} />
       <Text style={styles.label}>Price:</Text>
-      <TextInput style={styles.input} keyboardType='numeric' value={price} onChangeText={setPrice} />
+      <TextInput style={styles.input} keyboardType='numeric' value={price.toString()} onChangeText={setPrice} />
       <Text style={styles.label}>Type of Product:</Text>
       <Picker
         selectedValue={type}
@@ -143,6 +148,15 @@ const AdminAddNewProduct = () => {
         <Picker.Item label="Hair" value="Hair" />
         <Picker.Item label="Perfume" value="Perfume" />
         <Picker.Item label="Other" value="Other" />
+      </Picker>
+      <Text style={styles.label}>Status of Product:</Text>
+      <Picker
+        selectedValue={status}
+        onValueChange={(itemValue, itemIndex) =>
+          setStatus(itemValue)
+        }>
+        <Picker.Item label="Available" value="Available" />
+        <Picker.Item label="Out-of-Stock" value="Out-of-Stock" />
       </Picker>
       <Text style={styles.label}>Gender:</Text>
       <View style={styles.radioGroup}>
@@ -195,7 +209,7 @@ const AdminAddNewProduct = () => {
       
       </View>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Add Product</Text>
+        <Text style={styles.buttonText}>Update Product</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -308,127 +322,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminAddNewProduct;
-
-
-// import React, { useState } from 'react';
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Image,
-// } from 'react-native';
-// import { RadioButton } from 'react-native-paper';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-
-// const genderOptions = [
-//   { label: 'Male', value: 'male' },
-//   { label: 'Female', value: 'female' },
-//   { label: 'Both', value: 'both' },
-// ];
-
-// const AdminAddNewProduct = ({ onSubmit }) => {
-//   const [name, setName] = useState('');
-//   const [brand, setBrand] = useState('');
-//   const [price, setPrice] = useState('');
-//   const [description, setDescription] = useState('');
-//   const [gender, setGender] = useState('both');
-
-//   const handleSubmit = () => {
-//     onSubmit({ name, brand, price, description, gender });
-//     setName('');
-//     setBrand('');
-//     setPrice('');
-//     setDescription('');
-//     setGender('both');
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.formContainer}>
-//         <Text style={styles.label}>Name:</Text>
-//         <TextInput
-//           style={styles.input}
-//           value={name}
-//           onChangeText={setName}
-//         />
-//         <Text style={styles.label}>Brand:</Text>
-//         <TextInput
-//           style={styles.input}
-//           value={brand}
-//           onChangeText={setBrand}
-//         />
-//         <Text style={styles.label}>Price:</Text>
-//         <TextInput
-//           style={styles.input}
-//           value={price}
-//           onChangeText={setPrice}
-//         />
-//         <Text style={styles.label}>Description:</Text>
-//         <TextInput
-//           style={[styles.input, styles.textarea]}
-//           value={description}
-//           onChangeText={setDescription}
-//           multiline={true}
-//           numberOfLines={4}
-//         />
-//         <View style={styles.genderContainer}>
-//           <Text style={[styles.label, styles.genderLabel]}>Gender:</Text>
-//           {genderOptions.map((option) => (
-//             <View key={option.value} style={styles.genderOption}>
-//               <RadioButton
-//                 value={option.value}
-//                 status={gender === option.value ? 'checked' : 'unchecked'}
-//                 onPress={() => setGender(option.value)}
-//               />
-//               <Text style={styles.genderOptionLabel}>{option.label}</Text>
-//             </View>
-//           ))}
-//         </View>
-//         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-//           <Text style={styles.buttonText}>Add Product</Text>
-//         </TouchableOpacity>
-//       </View>
-//       <Image
-//         source={require('./assets/images/cosmetic.png')}
-//         style={styles.image}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     backgroundColor: '#F2F2F2',
-//   },
-//   formContainer: {
-//     backgroundColor: '#fff',
-//     borderRadius: 8,
-//     padding: 16,
-//     width: '80%',
-//     maxWidth: 400,
-//     marginBottom: 16,
-//   },
-//   label: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginBottom: 8,
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 8,
-//     paddingHorizontal: 12,
-//     paddingVertical: 8,
-//     marginBottom: 16,
-//   },
- 
-// network error
-
-
-
+export default AdminEditProduct;

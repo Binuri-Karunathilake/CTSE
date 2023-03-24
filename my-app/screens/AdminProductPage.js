@@ -1,139 +1,19 @@
-// import React from 'react';
-// import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
-// const AdminProductPage = ({ image, name, price, type, gender, description, brand, onEdit, onDelete }) => {
-
-//     const product = {
-//         image: 'https://example.com/my-product-image.jpg',
-//         name: 'My Skincare Product',
-//         price: '$24.99',
-//         type: 'Moisturizer',
-//         gender: 'Unisex',
-//         brand: 'My Brand',
-//         description: 'This is a description of my skincare product.',
-//       };
-
-//   return (
-//     <View style={styles.container}>
-//       <Image style={styles.image} source={{ uri: product.image }} />
-//       <View style={styles.infoContainer}>
-//         <Text style={styles.name}>{product.name}</Text>
-//         <Text style={styles.price}>{product.price}</Text>
-//         <View style={styles.typeContainer}>
-//           <Text style={styles.type}>{product.type}</Text>
-//           <Text style={styles.gender}>{product.gender}</Text>
-//         </View>
-//         <Text style={styles.brand}>{product.brand}</Text>
-//         <Text style={styles.description}>{product.description}</Text>
-//       </View>
-//       <View style={styles.buttonContainer}>
-//         <TouchableOpacity style={[styles.button, styles.editButton]} onPress={onEdit}>
-//           <Text style={styles.buttonText}>Edit</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={onDelete}>
-//           <Text style={styles.buttonText}>Delete</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//     padding: 16,
-//     backgroundColor: '#fff',
-//     borderRadius: 8,
-//     shadowColor: '#000',
-//     shadowOffset: {
-//       width: 0,
-//       height: 2,
-//     },
-//     shadowOpacity: 0.25,
-//     shadowRadius: 3.84,
-//     elevation: 5,
-//   },
-//   image: {
-//     width: 100,
-//     height: 100,
-//     borderRadius: 8,
-//     marginRight: 16,
-//   },
-//   infoContainer: {
-//     flex: 1,
-//   },
-//   name: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//     marginBottom: 8,
-//   },
-//   price: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     color: '#008080',
-//     marginBottom: 8,
-//   },
-//   typeContainer: {
-//     flexDirection: 'row',
-//     marginBottom: 8,
-//   },
-//   type: {
-//     backgroundColor: '#008080',
-//     color: '#fff',
-//     paddingHorizontal: 8,
-//     paddingVertical: 4,
-//     borderRadius: 8,
-//     marginRight: 8,
-//     fontWeight: 'bold',
-//   },
-//   gender: {
-//     backgroundColor: '#f0f0f0',
-//     color: '#333',
-//     paddingHorizontal: 8,
-//     paddingVertical: 4,
-//     borderRadius: 8,
-//     fontWeight: 'bold',
-//   },
-//   brand: {
-//     fontSize: 16,
-//     marginBottom: 8,
-//   },
-//   description: {
-//     fontSize: 16,
-//     color: '#666',
-//   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     marginTop: 16,
-//   },
-//   button: {
-//     paddingHorizontal: 16,
-//     paddingVertical: 8,
-//     borderRadius: 8,
-//     marginHorizontal: 8,
-//   },
-//   editButton: {
-//     backgroundColor: '#008080',
-//   },
-//   deleteButton: {
-//     backgroundColor: '#f0f0f0',
-//   },
-//   buttonText: {
-//     color: '#fff',
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default AdminProductPage;
-
+import { useNavigation } from '@react-navigation/native';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteObject, ref } from 'firebase/storage';
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { fireStoreDB, storage } from '../firebase';
 
 const AdminProductPage = ({route}) => {
-  const {item} = route.params;
+  const navigation = useNavigation();
+
+  const [showAlert, setShowAlert] = useState(false);
+
+  const {item, id} = route.params;
   console.log(item);
+  console.log(id);
      const product = {
         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMsA-1D8ReqQVJvrap7Qe0HP87izSh8ulw0Q&usqp=CAU',
         name: 'My Skincare Product',
@@ -147,21 +27,46 @@ const AdminProductPage = ({route}) => {
   const [isEditing, setIsEditing] = useState(false);
   
   const handleEdit = () => {
-    setIsEditing(true);
+    navigation.navigate("Admin Edit Product Details", {item, id})
   }
   
   const handleDelete = () => {
-    // handle delete product
+    console.log(id);
+    try {
+      setShowAlert(true);
+    } catch (error) {
+      alert(error.message);
+    }
   }
+
+  const hideAlert = () => {
+    setShowAlert(false);
+  }
+
+  const deleteProduct = async () => {
+
+    try {
+      const delRef = ref(storage, item.image);
+      await deleteObject(delRef);
+      await deleteDoc(doc(fireStoreDB, 'products', id));
+      setShowAlert(false);
+      navigation.navigate('AdminViewProductList')
+    } catch (error) {
+      alert(error.message);
+    }
+
+  }
+
   
   return (
     <View style={styles.container}>
     <Image source={{ uri: item.image }} style={styles.image} />
     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
       <Text style={styles.title}>{item.name}</Text>
-      <Text style={item.status === "available" ? styles.subtitleAvailable : styles.subtitleOut}>{item.status}</Text>
+      <Text style={item.status === "Available" ? styles.subtitleAvailable : styles.subtitleOut}>{item.status}</Text>
     </View>
-    <Text style={styles.subtitle}>{item.type} - {item.gender}</Text>
+    <Text style={styles.subtitle}>Type of Product : {item.type}</Text>
+    <Text style={styles.subtitle}>{item.gender === 'male'? 'For Men' : item.gender === 'female'? 'For Women' : 'Unisex'}</Text>
     <Text style={styles.price}>Rs.{item.price}</Text>
     <Text style={styles.description}>{item.description}</Text>
     <View style={styles.buttonContainer}>
@@ -171,6 +76,22 @@ const AdminProductPage = ({route}) => {
       <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
         <Text style={styles.buttonText}>Delete</Text>
       </TouchableOpacity>
+      <AwesomeAlert
+          //From Awesome alert documentation
+          show={showAlert}
+          showProgress={false}
+          title="Delete Product"
+          message="Are you sure you want to delete the product? This cannot be undone."
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, cancel"
+          confirmText="Yes, delete it"
+          confirmButtonColor="#DD6B55"
+          onCancelPressed={hideAlert}
+          onConfirmPressed={deleteProduct}
+        />
     </View>
   </View>
   );
