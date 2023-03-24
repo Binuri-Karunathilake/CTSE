@@ -11,6 +11,8 @@ import OrdersPage from './screens/UserOrders'
 import UserAddShippingDetails from './screens/UserAddShippingDetails'
 import UserViewProductDetails from './screens/UserViewProductDetails'
 import UserProductInfo from './components/UserProductInfo';
+import UserShippingInfo from './components/UserShippingInfo';
+import shippingDetailsList from './screens/shippingDetailsList';
 
 // import AdminStack from './navigation/AdminStack';
 
@@ -18,6 +20,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name='shippingDetailsList' component={shippingDetailsList} />
+
+
       <Stack.Screen name='UserViewProductDetails' component={UserViewProductDetails} />
       <Stack.Screen name='UserProductInfo' component={ProductDetails} />
       <Stack.Screen name='UserAddShippingDetails' component={UserAddShippingDetails} />

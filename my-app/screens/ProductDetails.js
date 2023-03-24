@@ -13,7 +13,7 @@ export default function App() {
     setShowSplash(true);
     setTimeout(() => {
       setShowSplash(false);
-      navigaiton.navigate('UserAddShippingDetails');
+      navigaiton.navigate('shippingDetailsList');
     }, 3000);
   };
 

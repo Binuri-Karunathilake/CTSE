@@ -38,11 +38,14 @@ const UserAddShippingDetails = () => {
     setDescription('');
   };
 
+  const user = {uid: "123456789"};
+
   const onSubmit = async () => {
     console.log({name, cno, adress, zipcode, description});
     try {
         const docRef = await addDoc(collection(fireStoreDB, "shippingDetails"), 
         {
+          userID : user.uid,
           name: name,
           cno: cno,
           adress: adress,
