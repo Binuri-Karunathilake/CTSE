@@ -10,16 +10,24 @@ import AddShippingDetails from './screens/AddShippingDetails'
 import OrdersPage from './screens/UserOrders'
 import UserAddShippingDetails from './screens/UserAddShippingDetails'
 import UserViewProductDetails from './screens/UserViewProductDetails'
+import UserProductInfo from './components/UserProductInfo';
+
+// import AdminStack from './navigation/AdminStack';
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name='UserViewProductDetails' component={UserViewProductDetails} />
+      <Stack.Screen name='UserProductInfo' component={ProductDetails} />
+      <Stack.Screen name='UserAddShippingDetails' component={UserAddShippingDetails} />
+      
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         
       </Stack.Navigator>
+      {/* <AdminStack/> */}
+
     </NavigationContainer>
   );
 }

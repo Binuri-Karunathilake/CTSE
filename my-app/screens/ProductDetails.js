@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
@@ -6,11 +7,13 @@ import SplashScreen from './SplashScreen';
 export default function App() {
   const [showSplash, setShowSplash] = useState(false);
 
+  const navigaiton = useNavigation();
+
   const handleBuyNow = () => {
     setShowSplash(true);
     setTimeout(() => {
       setShowSplash(false);
-      alert('Buy now!');
+      navigaiton.navigate('UserAddShippingDetails');
     }, 3000);
   };
 

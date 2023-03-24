@@ -41,7 +41,7 @@ const UserAddShippingDetails = () => {
   const onSubmit = async () => {
     console.log({name, cno, adress, zipcode, description});
     try {
-        const docRef = await addDoc(collection(fireStoreDB, "products"), 
+        const docRef = await addDoc(collection(fireStoreDB, "shippingDetails"), 
         {
           name: name,
           cno: cno,
@@ -50,11 +50,13 @@ const UserAddShippingDetails = () => {
           description: description,
         });
         console.log("Document written with ID: ", docRef.id);
-        navigation.navigate('Home');
+        navigation.navigate('UserViewProductDetails');
     } catch (error) {
-      console.error("Error adding adress: ", e);
+      console.error("Error adding adress: ", error.message);
     }
   };
+
+
 
   return (
     <ScrollView style={styles.container}>

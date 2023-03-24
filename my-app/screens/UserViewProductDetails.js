@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, Text, TextInput, View, StyleSheet, Dimensions, Image } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+//import { TouchableOpacity } from 'react-native-gesture-handler';
 import UserProductInfo from '../components/UserProductInfo';
 
 const PRODUCTS = [
