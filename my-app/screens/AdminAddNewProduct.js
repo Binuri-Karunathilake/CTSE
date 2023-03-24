@@ -10,6 +10,7 @@ import { async } from '@firebase/util';
 import { set } from 'react-native-reanimated';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const genders = [
   { label: 'Male', value: 'male' },
@@ -27,6 +28,7 @@ const AdminAddNewProduct = () => {
   const [image, setImage] = useState(null);
   const [uploading, setuploading] = useState(false);
   const [uploaded, setuploaded] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const navigation = useNavigation();
   
@@ -83,6 +85,14 @@ const AdminAddNewProduct = () => {
     }
   }
 
+  const handleshowAlert = () => {
+    setShowAlert(true);
+  };
+
+  const hideAlert = () => {
+    setShowAlert(false);
+  }
+
   const handleUpload = async () => {
     const imgRef = await uploadImage(image);
     setImage(imgRef);
@@ -91,6 +101,10 @@ const AdminAddNewProduct = () => {
   }
 
   const handleSubmit = async () => {
+    if(name == '' || brand == '' || description == '' || gender == '' || price == ''){
+      handleshowAlert();
+      return;
+    }
     await onSubmit({ name, brand, price, gender, description });
     setName('');
     setBrand('');
@@ -123,6 +137,17 @@ const AdminAddNewProduct = () => {
 
   return (
     <ScrollView style={styles.container}>
+      <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Please fill all the fields"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          cancelText="Ok"
+          cancelButtonColor="#52ab98"
+          onCancelPressed={hideAlert}
+        />
       {/* <View style={styles.header}>
         <FontAwesome5 name="store" size={24} color="#007bff" />
         <Text style={styles.title}>Add New Product</Text>
@@ -309,126 +334,6 @@ const styles = StyleSheet.create({
 });
 
 export default AdminAddNewProduct;
-
-
-// import React, { useState } from 'react';
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Image,
-// } from 'react-native';
-// import { RadioButton } from 'react-native-paper';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-
-// const genderOptions = [
-//   { label: 'Male', value: 'male' },
-//   { label: 'Female', value: 'female' },
-//   { label: 'Both', value: 'both' },
-// ];
-
-// const AdminAddNewProduct = ({ onSubmit }) => {
-//   const [name, setName] = useState('');
-//   const [brand, setBrand] = useState('');
-//   const [price, setPrice] = useState('');
-//   const [description, setDescription] = useState('');
-//   const [gender, setGender] = useState('both');
-
-//   const handleSubmit = () => {
-//     onSubmit({ name, brand, price, description, gender });
-//     setName('');
-//     setBrand('');
-//     setPrice('');
-//     setDescription('');
-//     setGender('both');
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.formContainer}>
-//         <Text style={styles.label}>Name:</Text>
-//         <TextInput
-//           style={styles.input}
-//           value={name}
-//           onChangeText={setName}
-//         />
-//         <Text style={styles.label}>Brand:</Text>
-//         <TextInput
-//           style={styles.input}
-//           value={brand}
-//           onChangeText={setBrand}
-//         />
-//         <Text style={styles.label}>Price:</Text>
-//         <TextInput
-//           style={styles.input}
-//           value={price}
-//           onChangeText={setPrice}
-//         />
-//         <Text style={styles.label}>Description:</Text>
-//         <TextInput
-//           style={[styles.input, styles.textarea]}
-//           value={description}
-//           onChangeText={setDescription}
-//           multiline={true}
-//           numberOfLines={4}
-//         />
-//         <View style={styles.genderContainer}>
-//           <Text style={[styles.label, styles.genderLabel]}>Gender:</Text>
-//           {genderOptions.map((option) => (
-//             <View key={option.value} style={styles.genderOption}>
-//               <RadioButton
-//                 value={option.value}
-//                 status={gender === option.value ? 'checked' : 'unchecked'}
-//                 onPress={() => setGender(option.value)}
-//               />
-//               <Text style={styles.genderOptionLabel}>{option.label}</Text>
-//             </View>
-//           ))}
-//         </View>
-//         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-//           <Text style={styles.buttonText}>Add Product</Text>
-//         </TouchableOpacity>
-//       </View>
-//       <Image
-//         source={require('./assets/images/cosmetic.png')}
-//         style={styles.image}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     backgroundColor: '#F2F2F2',
-//   },
-//   formContainer: {
-//     backgroundColor: '#fff',
-//     borderRadius: 8,
-//     padding: 16,
-//     width: '80%',
-//     maxWidth: 400,
-//     marginBottom: 16,
-//   },
-//   label: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginBottom: 8,
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 8,
-//     paddingHorizontal: 12,
-//     paddingVertical: 8,
-//     marginBottom: 16,
-//   },
- 
-// network error
 
 
 

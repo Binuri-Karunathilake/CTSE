@@ -1,6 +1,6 @@
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, TextInput, View, StyleSheet, Dimensions, Image } from 'react-native';
+import { FlatList, Text, TextInput, View, StyleSheet, Dimensions, Image, ImageBackground, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AdminProductInfo from '../components/AdminProductInfo';
 import { fireStoreDB } from '../firebase';
@@ -61,7 +61,7 @@ const AdminViewProductList = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ImageBackground style={styles.container} source={require('../assets/prodBG.jpg')} blurRadius={8}>
       <TextInput
         style={styles.searchInput}
         placeholder="Search products..."
@@ -75,6 +75,7 @@ const AdminViewProductList = () => {
           </TouchableOpacity>
         ))}
       </View>
+      <View>
       <FlatList
         data={filteredProducts}
         extraData={filteredProducts}
@@ -84,7 +85,8 @@ const AdminViewProductList = () => {
         }}
         keyExtractor={(item) => item.id.toString()}
       />
-    </View>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'red'
   },
   searchInput: {
     borderWidth: 1,

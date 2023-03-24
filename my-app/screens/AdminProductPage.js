@@ -61,13 +61,13 @@ const AdminProductPage = ({route}) => {
   return (
     <View style={styles.container}>
     <Image source={{ uri: item.image }} style={styles.image} />
+    <Text style={styles.price}>Rs.{item.price}</Text>
     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
       <Text style={styles.title}>{item.name}</Text>
       <Text style={item.status === "Available" ? styles.subtitleAvailable : styles.subtitleOut}>{item.status}</Text>
     </View>
     <Text style={styles.subtitle}>Type of Product : {item.type}</Text>
     <Text style={styles.subtitle}>{item.gender === 'male'? 'For Men' : item.gender === 'female'? 'For Women' : 'Unisex'}</Text>
-    <Text style={styles.price}>Rs.{item.price}</Text>
     <Text style={styles.description}>{item.description}</Text>
     <View style={styles.buttonContainer}>
       <TouchableOpacity onPress={handleEdit} style={styles.editButton}>

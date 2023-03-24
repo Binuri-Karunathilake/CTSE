@@ -15,9 +15,18 @@ const Drawer = createDrawerNavigator();
 
 const AdminStack = () => {
   return (
-    <Drawer.Navigator screenOptions={{drawerLabelStyle: {marginLeft: -25, fontFamily: '', fontSize: 15}, drawerActiveBackgroundColor: '#2b6777', drawerActiveTintColor: '#fff', drawerInactiveTintColor: '#333', unmountOnBlur:true}} drawerContent={props => <CustomDrawer {...props}  /> }  >
+    <Drawer.Navigator screenOptions={{drawerLabelStyle: {marginLeft: -25, fontFamily: '', fontSize: 15}, drawerActiveBackgroundColor: '#2b6777', drawerActiveTintColor: '#fff', drawerInactiveTintColor: '#333', unmountOnBlur:true,
+        headerStyle: {
+          backgroundColor: '#2b6777',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: '500',
+        },
+    }} drawerContent={props => <CustomDrawer {...props}  /> }  >
         <Drawer.Screen name='AdminViewProductList' component={AdminViewProductList} 
         options={{
+          title: 'Products (Admin)',
           drawerIcon: ({color}) => (
             <MaterialIcons  name='storefront' size={22} color={color} />
           )
