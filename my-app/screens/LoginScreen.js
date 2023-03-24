@@ -89,15 +89,14 @@ const LoginScreen = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userType, setUserType] = useState(false);
+
 
     const loginUser = async (email, password) => {
+        if(email === "hello@gmail.com") {
+        }
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
-            if(email === "admin@123.com") {
-                setUserType(true)
-            }
             console.log('Logged in with : ' + user.email);
         })
         .catch(error => {
@@ -127,7 +126,8 @@ const LoginScreen = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if(user && userType) {
+            console.log(user);
+            if(user.email === 'hello@gmail.com') {
                 navigation.replace('AdminStack');
             } 
             else if (user) {

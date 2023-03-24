@@ -1,11 +1,23 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { auth } from '../firebase'
+import { onAuthStateChanged, signOut } from '@firebase/auth'
 
 const CustomDrawer = (props) => {
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if(!user) {
+                navigation.replace('Login');
+            }
+        })
+        return unsubscribe;
+    }, [])
+
     const navigation = useNavigation();
   return (
     <View style={{flex: 1, backgroundColor: "#c8d8e4"}}>
@@ -17,7 +29,13 @@ const CustomDrawer = (props) => {
             <DrawerItemList {...props}/>
         </DrawerContentScrollView>
         <View style={styles.bottumDrawerView}>
-            <TouchableOpacity onPress={() => {navigation.navigate('Login')}} style={styles.drawerButton}>
+            <TouchableOpacity onPress={() => {
+                signOut(auth).then(() => {
+                    alert("Signed out successfully")
+                  }).catch((error) => {
+                    alert(error.message)
+                  });
+            }} style={styles.drawerButton}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name='exit-outline' size={22}/>
                     <Text style={styles.bottonButtonText}>Sign Out</Text>
