@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from "react";
 import { firebase } from "./firebase";
@@ -8,6 +9,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfilePage from './screens/UserProfile';
+import AdminAddNewProduct from './screens/AdminAddNewProduct';
+import AdminViewProductList from './screens/AdminViewProductList';
+import AdminStack from './navigation/AdminStack';
+import AdminProductPage from './screens/AdminProductPage';
 import AdminHomeScreen from './screens/AdminHomeScreen';
 import EditProfile from './screens/EditProfile';
 import Login from './screens/LoginScreen';
