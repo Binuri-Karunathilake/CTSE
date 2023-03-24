@@ -8,11 +8,14 @@ import UserProfilePage from './screens/UserProfile';
 import ProductDetails from './screens/ProductDetails'
 import AddShippingDetails from './screens/AddShippingDetails'
 import OrdersPage from './screens/UserOrders'
+import UserAddShippingDetails from './screens/UserAddShippingDetails'
+import UserViewProductDetails from './screens/UserViewProductDetails'
+
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name='AddShippingDetails' component={AddShippingDetails} />
+      <Stack.Screen name='UserViewProductDetails' component={UserViewProductDetails} />
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         
