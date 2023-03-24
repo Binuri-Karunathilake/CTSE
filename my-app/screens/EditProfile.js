@@ -1,23 +1,19 @@
 import React, {useState,useEffect} from 'react'
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
 // import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import {firebase}  from '../firebase'
 import { useNavigation } from '@react-navigation/native';
 
-
-export default UserProfile = () => {
+export default EditProfile = () => {
   // Replace these with your own user information
   const [fName,setfName] = useState ('');
   const [Lname, setLname]= useState ('');
   const [email, setEmail] = useState ('');
   const [phoneNumber,setphoneNumber] = useState ('');
   const [image, setImage] = useState (null);
-  const navigation = useNavigation()
-
-  // const user = auth.currentUser;
-  // console.log(user);
-  // console.log(user.uid);
+  const [UserProfile, setUserProfile] = useState(null);
+    const navigation = useNavigation()
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -52,8 +48,42 @@ export default UserProfile = () => {
       });
   }, []);
 
+  // useEffect(() => {
+  //   const uid = firebase.auth().currentUser.uid;
+  //   firebase.firestore().collection('users').doc(uid)
+  //     .onSnapshot((snapshot) => {
+  //       const { fName, Lname, email, phoneNumber, address } = snapshot.data();
+  //       setfName(fName);
+  //       setLname(Lname);
+  //       setEmail(email);
+  //       setphoneNumber(phoneNumber);
+  //       // setAddress(address);
+  //     });
+  // }, []);
+
   const handleLogout = () => {
     firebase.auth().signOut();
+  };
+
+  const handleSave = () => {
+    const uid = firebase.auth().currentUser.uid;
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .update({
+        fName,
+        Lname,
+        phoneNumber,
+      })
+      .then(() => {
+        console.log('User data updated successfully!');
+        setUserProfile({ ...UserProfile, fName, Lname, phoneNumber });
+        navigation.navigate('UserProfile');
+      })
+      .catch((error) => {
+        console.log('Error updating user data:', error);
+      });
   };
 
   return (
@@ -77,16 +107,13 @@ export default UserProfile = () => {
       <View style={styles.body}>
         <View style={styles.bodyContent}>
           <Text style={styles.name}>{fName} {Lname}</Text>
-          {/* <Text style={styles.info}>UX Designer / Mobile developer</Text>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis,
-            omittam deseruisse consequuntur ius an,
-          </Text> */}
+      
           <View style={styles.btn}>
             <TouchableOpacity 
             style={[styles.buttonOutLine, styles.buttonContainer]}
-            onPress={()=>navigation.navigate('EditProfile')}>
-              <Text>Edit</Text>
+            onPress={handleSave}
+            >
+              <Text>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
                   onPress={handleLogout}>
@@ -97,19 +124,30 @@ export default UserProfile = () => {
             <View style={styles.container1}>
                 <Text style={styles.questions}>Name : </Text>
                 <View style={styles.textcontainer}>
-                  <Text style={styles.paragraph}>{`${fName} ${Lname}`} </Text>
+                  <TextInput 
+                  style={styles.paragraph} 
+                  value={`${fName} ${Lname}`}
+                  onChangeText={(text) => {
+                    const [firstName, lastName] = text.split(' ');
+                    setfName(firstName);
+                    setLname(lastName);
+                  }} />
                 </View>
                 <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>
-                  <Text style={styles.paragraph}>{email} </Text>
+                  <TextInput style={styles.paragraph} value={email} editable={false} />
                 </View>
                <Text style={styles.questions}>Phone :</Text>
                 <View style={styles.textcontainer}>
-                  <Text style={styles.features}>{phoneNumber} </Text>
+                  <TextInput 
+                  style={styles.features} 
+                  value={phoneNumber}
+                  onChangeText={setphoneNumber}
+                 />
                 </View>
                 {/* <Text style={styles.questions}>Address : </Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph} value={address} />
+                  <TextInput style={styles.paragraph}>{address}</TextInput>
                 </View>  */}
             </View>   
           </View>
