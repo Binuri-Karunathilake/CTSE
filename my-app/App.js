@@ -10,12 +10,15 @@ import AdminAddNewProduct from './screens/AdminAddNewProduct';
 import AdminViewProductList from './screens/AdminViewProductList';
 import AdminStack from './navigation/AdminStack';
 import AdminProductPage from './screens/AdminProductPage';
+import ShoppingCartScreen from './screens/ShoppingCart';
+import CheckoutScreen from './screens/Checkout';
+import HelpScreen from './screens/ShoppingHelp';
 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <AdminStack/>
+      <CheckoutScreen/>
     </NavigationContainer>
   );
 }
