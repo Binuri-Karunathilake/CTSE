@@ -124,6 +124,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: '500',
     marginRight: 10,
+    padding: 5,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#52ab98'
   },
   subtitleOut: {
     fontSize: 16,
@@ -131,6 +136,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: '500',
     marginRight: 10,
+    padding: 5,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#b5443c'
   },
   price: {
     fontSize: 18,

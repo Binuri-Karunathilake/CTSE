@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   subtitleAvailable: {
     fontSize: 12,
     marginBottom: 10,
-    fontWeight: '500',
+    fontWeight: '800',
     marginRight: 10,
   },
   imageContainer: {
