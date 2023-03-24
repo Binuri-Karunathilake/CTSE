@@ -1,34 +1,122 @@
-import React from 'react'
-import { StyleSheet, Text,TextInput, View, Image, TouchableOpacity,ScrollView } from 'react-native'
+import React, {useState,useEffect} from 'react'
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
+// import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
+import {firebase}  from '../firebase'
+import { useNavigation } from '@react-navigation/native';
 
-export default Profile = () => {
+export default EditProfile = () => {
   // Replace these with your own user information
-  const name = 'John Doe';
-  const phoneNumber = '123-456-7890';
-  const address = '123 Main St, Anytown USA';
-  const bio = 'I am a software developer with a passion for building great products.';
+  const [fName,setfName] = useState ('');
+  const [Lname, setLname]= useState ('');
+  const [email, setEmail] = useState ('');
+  const [phoneNumber,setphoneNumber] = useState ('');
+  const [image, setImage] = useState (null);
+  const [UserProfile, setUserProfile] = useState(null);
+    const navigation = useNavigation()
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+
+  };
+
+  useEffect(() => {
+    const uid = firebase.auth().currentUser.uid;
+    firebase.firestore().collection('users').doc(uid).get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          const { fName, Lname, email, phoneNumber, address } = snapshot.data();
+          setfName(fName);
+          setLname(Lname);
+          setEmail(email);
+          setphoneNumber(phoneNumber);
+          // setAddress(address);
+        } else {
+          console.log('User does not exist');
+        }
+      })
+      .catch((error) => {
+        console.log('Error fetching user data:', error);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   const uid = firebase.auth().currentUser.uid;
+  //   firebase.firestore().collection('users').doc(uid)
+  //     .onSnapshot((snapshot) => {
+  //       const { fName, Lname, email, phoneNumber, address } = snapshot.data();
+  //       setfName(fName);
+  //       setLname(Lname);
+  //       setEmail(email);
+  //       setphoneNumber(phoneNumber);
+  //       // setAddress(address);
+  //     });
+  // }, []);
+
+  const handleLogout = () => {
+    firebase.auth().signOut();
+  };
+
+  const handleSave = () => {
+    const uid = firebase.auth().currentUser.uid;
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .update({
+        fName,
+        Lname,
+        phoneNumber,
+      })
+      .then(() => {
+        console.log('User data updated successfully!');
+        setUserProfile({ ...UserProfile, fName, Lname, phoneNumber });
+        navigation.navigate('UserProfile');
+      })
+      .catch((error) => {
+        console.log('Error updating user data:', error);
+      });
+  };
 
   return (
   <ScrollView>
     <View style={styles.container}>
       <View style={styles.header}></View>
-      <Image
+      {/* <Image
         style={styles.avatar}
         source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }}
+        
       />
+           */}
+ <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.avatar} />
+          ) : (
+            <Image source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} style={styles.avatar} />
+          )}
+        </TouchableOpacity>
+
       <View style={styles.body}>
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>John Doe</Text>
-          {/* <Text style={styles.info}>UX Designer / Mobile developer</Text>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis,
-            omittam deseruisse consequuntur ius an,
-          </Text> */}
+          <Text style={styles.name}>{fName} {Lname}</Text>
+      
           <View style={styles.btn}>
-            <TouchableOpacity style={[styles.buttonOutLine, styles.buttonContainer]}>
+            <TouchableOpacity 
+            style={[styles.buttonOutLine, styles.buttonContainer]}
+            onPress={handleSave}
+            >
               <Text>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}>
+            <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
+                  onPress={handleLogout}>
               <Text>Logout</Text>
             </TouchableOpacity>
           </View>
@@ -36,20 +124,31 @@ export default Profile = () => {
             <View style={styles.container1}>
                 <Text style={styles.questions}>Name : </Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph}>{name}</TextInput>
+                  <TextInput 
+                  style={styles.paragraph} 
+                  value={`${fName} ${Lname}`}
+                  onChangeText={(text) => {
+                    const [firstName, lastName] = text.split(' ');
+                    setfName(firstName);
+                    setLname(lastName);
+                  }} />
                 </View>
-                <Text style={styles.questions}>Bio : </Text>
+                <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph}>{bio}</TextInput>
+                  <TextInput style={styles.paragraph} value={email} editable={false} />
                 </View>
                <Text style={styles.questions}>Phone :</Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.features}>{phoneNumber}</TextInput>
+                  <TextInput 
+                  style={styles.features} 
+                  value={phoneNumber}
+                  onChangeText={setphoneNumber}
+                 />
                 </View>
-                <Text style={styles.questions}>Address : </Text>
+                {/* <Text style={styles.questions}>Address : </Text>
                 <View style={styles.textcontainer}>
                   <TextInput style={styles.paragraph}>{address}</TextInput>
-                </View> 
+                </View>  */}
             </View>   
           </View>
         </View>
@@ -75,6 +174,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     marginTop: 130,
+  },
+
+  avatarContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addImage:{
+    flexDirection: 'column',
+    marginTop: 120,
+    marginRight:40,
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end'
   },
   // name: {
   //   fontSize: 22,
@@ -115,6 +226,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: 150,
     borderRadius: 10,
+    
     // backgroundColor: '#10B981',
   },
   logoutButtonContainer: {
@@ -150,7 +262,9 @@ const styles = StyleSheet.create({
     opacity: 5,
     backgroundColor: '#F2F2F2',
     padding: 5,
-    marginBottom:5
+    marginBottom:5,
+    width: '100%'
+
   },
   container1: {
     backgroundColor: 'white',
@@ -183,7 +297,9 @@ const styles = StyleSheet.create({
     // fontFamily: 'Georgia',
     fontSize: 14,
     lineHeight: 16 * 1.5,
-    textAlign: 'justify'
+    textAlign: 'justify',
+    maxWidth: 200,
+    minWidth: 500
   },
 
 

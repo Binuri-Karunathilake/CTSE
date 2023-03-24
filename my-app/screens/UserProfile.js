@@ -1,19 +1,19 @@
 import React, {useState,useEffect} from 'react'
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 // import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import {firebase}  from '../firebase'
+import { useNavigation } from '@react-navigation/native';
 
 
-export default Profile = () => {
+export default UserProfile = () => {
   // Replace these with your own user information
   const [fName,setfName] = useState ('');
   const [Lname, setLname]= useState ('');
-  // const [phoneNumber, setPhoneNumber] = useState ('123-456-7890');
-  // const [address, setAddress] = useState ('123 Main St, Anytown USA');
   const [email, setEmail] = useState ('');
   const [phoneNumber,setphoneNumber] = useState ('');
   const [image, setImage] = useState (null);
+  const navigation = useNavigation()
 
   // const user = auth.currentUser;
   // console.log(user);
@@ -83,7 +83,9 @@ export default Profile = () => {
             omittam deseruisse consequuntur ius an,
           </Text> */}
           <View style={styles.btn}>
-            <TouchableOpacity style={[styles.buttonOutLine, styles.buttonContainer]}>
+            <TouchableOpacity 
+            style={[styles.buttonOutLine, styles.buttonContainer]}
+            onPress={()=>navigation.navigate('EditProfile')}>
               <Text>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
@@ -95,15 +97,15 @@ export default Profile = () => {
             <View style={styles.container1}>
                 <Text style={styles.questions}>Name : </Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph} value={`${fName} ${Lname}`}/>
+                  <Text style={styles.paragraph}>{`${fName} ${Lname}`} </Text>
                 </View>
                 <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph} value={email} />
+                  <Text style={styles.paragraph}>{email} </Text>
                 </View>
                <Text style={styles.questions}>Phone :</Text>
                 <View style={styles.textcontainer}>
-                  <TextInput style={styles.features} value={phoneNumber} />
+                  <Text style={styles.features}>{phoneNumber} </Text>
                 </View>
                 {/* <Text style={styles.questions}>Address : </Text>
                 <View style={styles.textcontainer}>

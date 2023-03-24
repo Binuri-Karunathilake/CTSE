@@ -1,43 +1,70 @@
 import { Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import TodoTask from '../components/Task'
-import { auth, fireStoreDB } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import {firebase}  from '../firebase'
+
 
 const HomeScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [name, setName] = useState('')
 
-const handleLogout = () => {
-  signOut(fireAuth).then(() => {
-    alert("Signed out successfully !")
-  }).catch((error) => {
-    alert(error.message)
-  });
-}
+  useEffect(() =>{
+    firebase.firestore().collection('users')
+    .doc(firebase.auth().currentUser.uid).get()
+    .then((snapshot) =>{
+      if(snapshot.exists){
+        setName(snapshot.data())
+      }
+      else {
+        console.log('User does not exist')
+      }
+    })
+  }, [])
 
-  const fireAuth = auth;
-  const user = fireAuth.currentUser;
+
+// const handleLogout = () => {
+//   signOut(fireAuth).then(() => {
+//     alert("Signed out successfully !")
+//   }).catch((error) => {
+//     alert(error.message)
+//   });
+// }
+
+  // const fireAuth = auth;
+  // const user = fireAuth.currentUser;
 
   
-  useEffect( () => {
-    const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-        if(!user) {
-            navigation.replace('Login');
-        }
-    })
-    return unsubscribe
-  }, [])
+  // useEffect( () => {
+  //   const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
+  //       if(!user) {
+  //           navigation.replace('Login');
+  //       }
+  //   })
+  //   return unsubscribe
+  // }, [])
   
 
   return (
     <View style={styles.listItemContainer}>
+        <Text style={{fontSize: 20, fontWeight:"bold"}}>
+        Hello, {name.fName}
+      </Text>
+      {/* <TouchableOpacity
+      style={styles.button}>
+        <Text style={{fontSize: 22, fontWeight: "bold"}}>
+          Sign Out
+        </Text>
+      </TouchableOpacity> */}
       <View style={styles.logoutButtonContainer}>
         <TouchableOpacity 
         style={styles.logoutButton} 
-        onPress={handleLogout}>
+      onPress={() => {firebase.auth().signOut()}}>
           <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+        style={styles.logoutButton} 
+      onPress={() => navigation.navigate('UserProfile')}>
+          <Text style={styles.logoutButtonText}>next</Text>
         </TouchableOpacity>
       </View>
     </View>

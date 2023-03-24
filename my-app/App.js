@@ -12,6 +12,7 @@ import AdminHomeScreen from './screens/AdminHomeScreen';
 import EditProfile from './screens/EditProfile';
 import Login from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import UserProfile from './screens/UserProfile';
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />        
+
         
       </Stack.Navigator>
   );
@@ -46,6 +49,7 @@ return(
     <Stack.Screen name="Home" component={HomeScreen} />
     <Stack.Screen name="AdminHome" component={AdminHomeScreen} />        
     <Stack.Screen options={{headerShown: false}} name='EditProfile' component={EditProfile} />
+    <Stack.Screen options={{headerShown: false}} name='UserProfile' component={UserProfile} />
   </Stack.Navigator>
 );
 }

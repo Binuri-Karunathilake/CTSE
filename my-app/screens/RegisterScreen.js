@@ -14,12 +14,13 @@ const RegisterScreen = () => {
     const [fName,setFirstName] = useState('');
     const [Lname,setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [phoneNumber, setphoneNumber] = useState ('');
     const [password, setPassword] = useState('');
 
     const navigation = useNavigation()
 
 
-    registerUser = async (fName, Lname, email, password) => {
+    registerUser = async (fName, Lname, email, phoneNumber, password) => {
         await firebase.auth().createUserWithEmailAndPassword(email, password)
           .then(() => {
             firebase.auth().currentUser.sendEmailVerification({
@@ -38,6 +39,7 @@ const RegisterScreen = () => {
                     fName,
                     Lname,
                     email,
+                    phoneNumber,
                   })
               })
               .catch((error) => {
@@ -149,6 +151,14 @@ const RegisterScreen = () => {
                 onChangeText={Lname => {setLastName(Lname)}}
                 autoCorrect={false}
                 style={styles.input} />
+
+        <TextInput
+                placeholder='Phone Number'
+                value={phoneNumber}
+                onChangephoneNumber={phoneNumber => {setphoneNumber(phoneNumber)}}
+                autoCorrect={false}
+                style={styles.input} />
+
             <TextInput
                 placeholder='Email'
                 value={email}
@@ -179,7 +189,7 @@ const RegisterScreen = () => {
             style={styles.buttonContainer}>
 
             <TouchableOpacity
-            onPress={() => registerUser(fName, Lname, email, password)}
+            onPress={() => registerUser(fName, Lname, email,phoneNumber, password)}
             style={styles.button}>
                 <Text style={styles.buttonText}>
                     Register

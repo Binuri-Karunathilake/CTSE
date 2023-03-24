@@ -1,46 +1,40 @@
 import { Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { auth, fireStoreDB } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import {firebase}  from '../firebase'
+
+
 
 const AdminHomeScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [name, setName] = useState('')
 
-const handleLogout = () => {
-  signOut(fireAuth).then(() => {
-    alert("Signed out successfully !")
-  }).catch((error) => {
-    alert(error.message)
-  });
-}
-
-  const fireAuth = auth;
-  const user = fireAuth.currentUser;
-
-  
-  useEffect( () => {
-    const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-        if(!user) {
-            navigation.replace('Login');
-        }
-    })
-    return unsubscribe
-  }, [])
-  
-
+  const handleLogout = async () => {
+    try {
+        await firebase.auth().signOut();
+        // Navigate back to login screen
+        navigation.navigate('Login');
+    } catch (error) {
+        alert(error.message);
+    }
+};
   return (
     <View style={styles.listItemContainer}>
+        <Text style={{fontSize: 20, fontWeight:"bold"}}>
+        Hello, {name.fName}
+      </Text>
+      {/* <TouchableOpacity
+      style={styles.button}>
+        <Text style={{fontSize: 22, fontWeight: "bold"}}>
+          Sign Out
+        </Text>
+      </TouchableOpacity> */}
       <View style={styles.logoutButtonContainer}>
         <TouchableOpacity 
         style={styles.logoutButton} 
-        onPress={handleLogout}>
+        onPress= {() => handleLogout()}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
-        <View>
-            <Text>Admin Home</Text>
-        </View>
       </View>
     </View>
   )
