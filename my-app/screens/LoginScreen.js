@@ -132,7 +132,7 @@ const LoginScreen = () => {
                 navigation.replace('AdminStack');
             } 
             else if (user) {
-                navigation.replace('Home')
+                navigation.replace('UserProfile')
             }
         })
         return unsubscribe;
