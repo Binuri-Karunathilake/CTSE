@@ -31,12 +31,17 @@ import ViewShippingDetails from './screens/ViewShippingDetails';
 import EditShippingDetails from './screens/EditShippingDetails';
 import UserStack from './navigation/UserStack';
 // import AdminStack from './navigation/AdminStack';
+import { LogBox } from 'react-native';
 
 export default function App() {
 
   const [initilizing, setInitilizing] = useState(true);
   const [user, setUser] = useState();
   const Stack = createNativeStackNavigator();
+  console.disableYellowBox = true;
+
+  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+  LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 

@@ -72,6 +72,8 @@ const AdminAddNewProduct = () => {
     }
   }
 
+  console.disableYellowBox = true;
+
   const handleDelete = async () => {
     setuploading(true);
     const delRef = ref(storage, image);
