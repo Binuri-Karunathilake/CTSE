@@ -2,7 +2,9 @@ import React, {useState,useEffect} from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
 // import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'expo-image-picker';
-import {firebase}  from '../firebase'
+import { auth, fireStoreDB } from '../firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 export default EditProfile = () => {
@@ -12,8 +14,10 @@ export default EditProfile = () => {
   const [email, setEmail] = useState ('');
   const [phoneNumber,setphoneNumber] = useState ('');
   const [image, setImage] = useState (null);
+    const [currentUser, setCurrentUser] = useState();
   const [UserProfile, setUserProfile] = useState(null);
     const navigation = useNavigation()
+    const [uID, setuID] = useState();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -28,63 +32,71 @@ export default EditProfile = () => {
 
   };
 
-  useEffect(() => {
-    const uid = firebase.auth().currentUser.uid;
-    firebase.firestore().collection('users').doc(uid).get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          const { fName, Lname, email, phoneNumber, address } = snapshot.data();
-          setfName(fName);
-          setLname(Lname);
-          setEmail(email);
-          setphoneNumber(phoneNumber);
-          // setAddress(address);
-        } else {
-          console.log('User does not exist');
+    const handleLogout = () => {
+    // handle logout logic
+    signOut(fireAuth).then(() => {
+      alert("Signed out successfully !")
+    }).catch((error) => {
+      alert(error.message)
+    });
+  };
+  const fireAuth = auth;
+  const LoggedInUser = fireAuth.currentUser;
+
+  const getUser = async () => {
+    const userRef = collection(fireStoreDB, "users");
+  // Create a query against the collection.
+    const user = query(userRef, where("userId", "==", LoggedInUser.uid));
+    const querySnapshot = await getDocs(user);
+    let returnedUser = {};
+    querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+
+      returnedUser = {id: doc.id, data: doc.data()};
+    });
+    console.log(returnedUser.data);
+    setuID(returnedUser.id)
+    setCurrentUser(returnedUser.data)
+    console.log("=================================");
+    setEmail(returnedUser.data.email);
+    setfName(returnedUser.data.fName);
+    setphoneNumber(returnedUser.data.phoneNumber);
+    setLname(returnedUser.data.Lname);
+  }
+  useEffect( () => {
+    getUser();
+    const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
+        if(!user) {
+            navigation.replace('Login');
         }
-      })
-      .catch((error) => {
-        console.log('Error fetching user data:', error);
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   const uid = firebase.auth().currentUser.uid;
-  //   firebase.firestore().collection('users').doc(uid)
-  //     .onSnapshot((snapshot) => {
-  //       const { fName, Lname, email, phoneNumber, address } = snapshot.data();
-  //       setfName(fName);
-  //       setLname(Lname);
-  //       setEmail(email);
-  //       setphoneNumber(phoneNumber);
-  //       // setAddress(address);
-  //     });
-  // }, []);
-
-  const handleLogout = () => {
-    firebase.auth().signOut();
+    })
+    return unsubscribe
+  }, [])
+  const handleSave = async () => {
+    await onSubmit({ fName, Lname, phoneNumber});
+    setfName('');
+    setLname('');
+    setphoneNumber('');
   };
 
-  const handleSave = () => {
-    const uid = firebase.auth().currentUser.uid;
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .update({
-        fName,
-        Lname,
-        phoneNumber,
-      })
-      .then(() => {
-        console.log('User data updated successfully!');
-        setUserProfile({ ...UserProfile, fName, Lname, phoneNumber });
+
+  const onSubmit = async () => {
+    console.log({fName, Lname, phoneNumber});
+    try {
+        const docRef = await updateDoc(doc(fireStoreDB, "users", uID), 
+        {
+          fName: fName,
+          Lname: Lname,
+          email: email,
+          phoneNumber: phoneNumber,
+        });
+        console.log("Document edited");
         navigation.navigate('UserProfile');
-      })
-      .catch((error) => {
-        console.log('Error updating user data:', error);
-      });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   };
+
 
   return (
   <ScrollView>
@@ -106,7 +118,7 @@ export default EditProfile = () => {
 
       <View style={styles.body}>
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>{fName} {Lname}</Text>
+          <Text style={styles.name}>{fName + ' ' + Lname}</Text>
       
           <View style={styles.btn}>
             <TouchableOpacity 
@@ -128,7 +140,7 @@ export default EditProfile = () => {
                   style={styles.paragraph} 
                   value={`${fName} ${Lname}`}
                   onChangeText={(text) => {
-                    const [firstName, lastName] = text.split(' ');
+                    const [firstName, lastName] = text.trim().split(' ');
                     setfName(firstName);
                     setLname(lastName);
                   }} />

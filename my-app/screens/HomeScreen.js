@@ -6,19 +6,10 @@ import {firebase}  from '../firebase'
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [name, setName] = useState('')
+  const [name, setName] = useState('');
 
   useEffect(() =>{
-    firebase.firestore().collection('users')
-    .doc(firebase.auth().currentUser.uid).get()
-    .then((snapshot) =>{
-      if(snapshot.exists){
-        setName(snapshot.data())
-      }
-      else {
-        console.log('User does not exist')
-      }
-    })
+
   }, [])
 
 
@@ -58,7 +49,7 @@ const HomeScreen = () => {
       <View style={styles.logoutButtonContainer}>
         <TouchableOpacity 
         style={styles.logoutButton} 
-      onPress={() => {firebase.auth().signOut()}}>
+      onPress={() => {console.log("Logging Out");}}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
         <TouchableOpacity 
