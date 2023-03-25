@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: 150,
     borderRadius: 10,
-    backgroundColor: 'red',
+    backgroundColor: '#b5443c',
   },
 
   btn: {
