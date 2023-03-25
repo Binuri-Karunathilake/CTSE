@@ -102,9 +102,13 @@ export default UserProfile = () => {
           </View>
           <View style={styles.form}>
             <View style={styles.container1}>
-                <Text style={styles.questions}>Name : </Text>
+                <Text style={styles.questions}>First Name : </Text>
                 <View style={styles.textcontainer}>
-                  <Text style={styles.paragraph}>{`${fName} ${Lname}`} </Text>
+                  <Text style={styles.paragraph}>{fName}</Text>
+                </View>
+                <Text style={styles.questions}>Last Name : </Text>
+                <View style={styles.textcontainer}>
+                  <Text style={styles.paragraph}>{Lname}</Text>
                 </View>
                 <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>

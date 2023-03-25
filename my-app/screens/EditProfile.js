@@ -134,16 +134,22 @@ export default EditProfile = () => {
           </View>
           <View style={styles.form}>
             <View style={styles.container1}>
-                <Text style={styles.questions}>Name : </Text>
+                <Text style={styles.questions}>First Name : </Text>
                 <View style={styles.textcontainer}>
                   <TextInput 
                   style={styles.paragraph} 
-                  value={`${fName} ${Lname}`}
-                  onChangeText={(text) => {
-                    const [firstName, lastName] = text.trim().split(' ');
-                    setfName(firstName);
-                    setLname(lastName);
-                  }} />
+                  value={fName}
+                  onChangeText={setfName}
+                    // const [firstName, lastName] = text.trim().split(' ');
+                 />
+                </View>
+                <Text style={styles.questions}>Last Name : </Text>
+                <View style={styles.textcontainer}>
+                  <TextInput 
+                  style={styles.paragraph} 
+                  value={Lname}
+                  onChangeText={setLname}
+                  />
                 </View>
                 <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>
