@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     expandIcon: {
         flex: 1,
         textAlign: 'right',
-        color: '#ff8c00',
+        color: '#b5443c',
 
     },
 });

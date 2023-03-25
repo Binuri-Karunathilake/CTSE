@@ -17,14 +17,26 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [phoneNumber, setphoneNumber] = useState ('');
     const [password, setPassword] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [emailError, setEmailError] = useState('');
 
     const navigation = useNavigation()
     const user = auth.currentUser;
 
     
 
-    registerUser = async (fName, Lname, email, phoneNumber, password) => {
-        // try {
+    // registerUser = async (fName, Lname, email, phoneNumber, password) => {
+        registerUser = async () => {
+            if (!/^\d{10}$/.test(phoneNumber.trim())) {
+                setPhoneError('Please enter a valid phone number');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+                setEmailError('Please enter a valid email address');
+                return;
+            }
+
+    // try {
         //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         //     const user = userCredential.user;
         
@@ -79,18 +91,25 @@ const RegisterScreen = () => {
                 placeholder='Phone Number'
                 value={phoneNumber}
                 keyboardType='number-pad'
-                onChangeText={phoneNumber => {setphoneNumber(phoneNumber)}}
+                onChangeText={phoneNumber => {
+                    setphoneNumber(phoneNumber);
+                    setPhoneError('');
+                }}
                 autoCorrect={false}
-                maxLength={10}
                 style={styles.input} />
+                {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
 
             <TextInput
                 placeholder='Email'
                 value={email}
-                onChangeText={email => {setEmail(email)}}
+                onChangeText={email => {
+                    setEmail(email);
+                    setEmailError('');
+                }}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 style={styles.input} />
+                {emailError? <Text style={styles.errorText}>{emailError}</Text> : null}
             <TextInput
                 style={styles.input} 
                 placeholder='Password'
@@ -196,6 +215,13 @@ const styles = StyleSheet.create({
         height: 150,
         marginBottom: 80,
         marginTop:20
-    }
+    },
+    errorText: {
+        fontSize: 14,
+        marginTop: 8,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color:'#b5443c',
+      },
     
 })
