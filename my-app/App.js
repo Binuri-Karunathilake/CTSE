@@ -21,11 +21,11 @@ import UserProfile from './screens/UserProfile';
 
 
 export default function App() {
-export default function App() {
+
   const [initilizing, setInitilizing] = useState(true);
   const [user, setUser] = useState();
   const Stack = createNativeStackNavigator();
-  const Stack = createNativeStackNavigator();
+
 
 
   return (

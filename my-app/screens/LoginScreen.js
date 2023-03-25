@@ -128,7 +128,7 @@ const LoginScreen = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             console.log(user);
-            if(user.email === 'hello@gmail.com') {
+            if(user && user.email === 'hello@gmail.com') {
                 navigation.replace('AdminStack');
             } 
             else if (user) {
