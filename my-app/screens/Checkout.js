@@ -57,78 +57,39 @@ const CheckoutScreen = () => {
 };
 
 const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 50
-// ,
-//   },
-//   itemContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginBottom: 16,
-//   },
-//   itemName: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-//   itemPrice: {
-//     fontSize: 18,
-//   },
-//   checkoutFormContainer: {
-//     flex: 1,
-//   },
-//   sectionTitle: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//     marginBottom: 16,
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 4,
-//     padding: 8,
-//     marginBottom: 16,
-//     fontSize: 18,
-//   },
-    container: {
-        paddingHorizontal: 20,
-        paddingVertical: 16,
-        backgroundColor: '#c8d8e4',
-    },
-
-    label: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-        color: '#333',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 10,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-        marginBottom: 16,
-        backgroundColor: '#f2f2f2',
-        color: '#333',
-        fontSize: 16,
-    },
-    textarea: {
-        height: 100,
-    },
-
-    button: {
-        backgroundColor: '#2b6777',
-        padding: 12,
-        borderRadius: 10,
-        marginBottom: 30
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
+  container: {
+    flex: 1,
+    padding: 50
+,
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  itemName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  itemPrice: {
+    fontSize: 18,
+  },
+  checkoutFormContainer: {
+    flex: 1,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 16,
+    fontSize: 18,
+  },
 });
 
 export default CheckoutScreen;
