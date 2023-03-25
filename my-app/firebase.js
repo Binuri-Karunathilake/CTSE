@@ -14,6 +14,7 @@ import 'firebase/compat/firestore';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 //Taken from firebase configuration
+
 const firebaseConfig = {
   apiKey: "AIzaSyCBY4yJacphgvU7V4rWAlP1AbWPK_0FVbM",
   authDomain: "reactapp-cea8f.firebaseapp.com",
