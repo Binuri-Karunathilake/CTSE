@@ -9,6 +9,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfilePage from './screens/UserProfile';
+
+import ProductDetails from './screens/ProductDetails'
+import OrdersPage from './screens/UserOrders'
+import UserAddShippingDetails from './screens/UserAddShippingDetails'
+import UserViewProductDetails from './screens/UserViewProductDetails'
+import UserProductInfo from './components/UserProductInfo';
+import UserShippingInfo from './components/UserShippingInfo';
+import shippingDetailsList from './screens/shippingDetailsList';
+import ViewShippingDetails from './screens/ViewShippingDetails';
+import EditShippingDetails from './screens/EditShippingDetails';
 import AdminAddNewProduct from './screens/AdminAddNewProduct';
 import AdminViewProductList from './screens/AdminViewProductList';
 import AdminStack from './navigation/AdminStack';
@@ -18,6 +28,7 @@ import EditProfile from './screens/EditProfile';
 import Login from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import UserProfile from './screens/UserProfile';
+
 
 
 export default function App() {
@@ -30,6 +41,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
+      <Stack.Screen name='UserViewProductDetails' component={UserViewProductDetails} />
+      <Stack.Screen name='UserProductInfo' component={ProductDetails} />
+      <Stack.Screen name='shippingDetailsList' component={shippingDetailsList} />
+
+      <Stack.Screen name='UserAddShippingDetails' component={UserAddShippingDetails} />
+      <Stack.Screen name='ViewShippingDetails' component={ViewShippingDetails} />
+      <Stack.Screen name='EditShippingDetails' component={EditShippingDetails} />
+
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />  
         <Stack.Screen
@@ -43,7 +62,7 @@ export default function App() {
       <Stack.Screen options={{headerShown: false}} name='UserProfile' component={UserProfile} />      
 
         
-      </Stack.Navigator>
+
       </NavigationContainer>
   );
 }
