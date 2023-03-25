@@ -18,6 +18,7 @@ import EditProfile from './screens/EditProfile';
 import Login from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import UserProfile from './screens/UserProfile';
+import SplashScreen from './screens/SpashScreen';
 
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen options={{headerShown: false}} name= "SplashScreen" screenOptions={{ headerShown: false }} component={SplashScreen}/>
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />  
