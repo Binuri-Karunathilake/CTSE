@@ -3,87 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firebase } from '../firebase'
-import { onAuthStateChanged, signInWithEmailAndPassword } from '@firebase/auth';
-
-
-// const LoginScreen = () => {
-//     const navigation = useNavigation();
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-
-//     loginUser = async (email, password) => {
-//         try {
-//           await firebase.auth().signInWithEmailAndPassword(email, password);
-//         } catch (error) {
-//           alert(error.message);
-//         }
-      
-//       };
-    
-//       const forgetPassword = () =>{
-//         firebase.auth().sendPasswordResetEmail(email)
-//         .then(() => {
-//           alert("Password reset email sent")
-//         }).catch((error) => {
-//           alert(error)
-//         })
-//       }
-
-// return (
-//     <KeyboardAvoidingView
-//     style={styles.container}
-//     behavior="height">
-//         <Image style={styles.logo} resizeMode="cover" source ={require("../assets/images/Welcome.jpg")}/>
-//         {/* <PageTitle>Sign In</PageTitle> */}
-//         <View style={styles.inputContainer}>
-//             <TextInput
-//                 placeholder='Email'
-//                 value={email}
-//                 onChangeText={(email) => {setEmail(email)}}
-//                 autoCapitalize="none"
-//                 autoCorrect={false}
-//                 style={styles.input} />
-//             <TextInput
-//                 placeholder='Password'
-//                 value={password}
-//                 secureTextEntry
-//                 onChangeText={password => {setPassword(password)}}
-//                 style={styles.input} />
-            
-//         </View>
-
-//         <View
-//             style={styles.buttonContainer}>
-
-//             <TouchableOpacity
-//             onPress={() => loginUser(email,password) }
-//             style={styles.button}>
-//                 <Text style={styles.buttonText}>
-//                     Login
-//                 </Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//             onPress={()=>navigation.navigate('RegisterScreen')}
-//             style={[styles.button, styles.buttonOutline]}>
-//                 <Text style={styles.buttonOutlineText}>
-//                     Register
-//                 </Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//             onPress={() => {forgetPassword()}}
-//             style={{ marginTop: 20 }}
-//             >
-//             <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-//             Forget Passowrd?
-//             </Text>
-//             </TouchableOpacity>
-//         </View>
-//     </KeyboardAvoidingView>
-//   )
-// }
-
-// export default LoginScreen
-
+import { onAuthStateChanged, signInWithEmailAndPassword,sendPasswordResetEmail } from '@firebase/auth';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -116,14 +36,15 @@ const LoginScreen = () => {
         })
     }
     
-    const forgetPassword = () =>{
-        // firebase.auth().sendPasswordResetEmail(email)
-        // .then(() => {
-        //     alert("Password reset email sent")
-        // }).catch((error) => {
-        //     alert(error)
-        // })
-    }
+    const forgetPassword = () => {
+        sendPasswordResetEmail(auth, email)
+          .then(() => {
+            alert("Password reset email sent");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -155,6 +76,7 @@ const LoginScreen = () => {
                 <TextInput
                     placeholder='Password'
                     value={password}
+                    autoCapitalize="none"
                     secureTextEntry
                     onChangeText={password => {setPassword(password)}}
                     style={styles.input} />

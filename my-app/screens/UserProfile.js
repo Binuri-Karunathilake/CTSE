@@ -68,8 +68,8 @@ export default UserProfile = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
 
   };
@@ -82,8 +82,9 @@ export default UserProfile = () => {
           {image ? (
             <Image source={{ uri: image }} style={styles.avatar} />
           ) : (
-            <Image source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} style={styles.avatar} />
+            <Image source={{ uri: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg' }} style={styles.avatar} />
           )}
+          {/* https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg */}
         </TouchableOpacity>
 
       <View style={styles.body}>
