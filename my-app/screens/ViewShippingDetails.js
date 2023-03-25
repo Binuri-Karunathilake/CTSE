@@ -7,7 +7,7 @@ import { fireStoreDB, storage } from '../firebase';
 import { StatusBar } from 'expo-status-bar';
 import ThanksBuySplashScreen from './ThanksBuySplashScreen';
 
-const AdminProductPage = ({route}) => {
+const ViewShippingDetails = ({route}) => {
   const navigation = useNavigation();
   const [showSplash, setShowSplash] = useState(false);
 
@@ -179,4 +179,4 @@ const styles = StyleSheet.create({
 
 
 
-export default AdminProductPage;
+export default ViewShippingDetails;

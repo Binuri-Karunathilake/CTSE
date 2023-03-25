@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,  ScrollView } from 'react-native';
-import { fireStoreDB, storage } from '../firebase';
+import { auth, fireStoreDB, storage } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,7 +26,7 @@ const UserAddShippingDetails = () => {
     setDescription('');
   };
 
-  const user = {uid: "123456789"};
+  const user = auth.currentUser;
 
   const onSubmit = async () => {
     console.log({name, cno, adress, zipcode, description});

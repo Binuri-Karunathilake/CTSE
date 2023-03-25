@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import SplashScreen from './SplashScreen';
 
-export default function App() {
+export default function ProductDetails({route}) {
   const [showSplash, setShowSplash] = useState(false);
+  
 
   const navigaiton = useNavigation();
 
@@ -17,16 +18,18 @@ export default function App() {
     }, 2000);
   };
 
+  const {item} = route.params
+  console.log(item);
+
   return (
     <View style={styles.container}>
       <Image
         style={styles.image}
         source={{
-          uri:
-            'https://static.thcdn.com/images/large/webp//productimg/1600/1600/13806351-6474952929341174.jpg',
+          uri: item.image
         }}
       />
-      <Text style={styles.productName}>Color Wow Dream Clean </Text>
+      <Text style={styles.productName}>{item.name}</Text>
       <Text style={styles.productDescription}>
         A vibrance-boosting haircare bundle featuring a shampoo and conditioner.
       

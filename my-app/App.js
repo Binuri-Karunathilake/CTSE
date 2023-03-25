@@ -29,6 +29,7 @@ import UserShippingInfo from './components/UserShippingInfo';
 import shippingDetailsList from './screens/shippingDetailsList';
 import ViewShippingDetails from './screens/ViewShippingDetails';
 import EditShippingDetails from './screens/EditShippingDetails';
+import UserStack from './navigation/UserStack';
 // import AdminStack from './navigation/AdminStack';
 
 export default function App() {
@@ -43,14 +44,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen options={{headerShown: false}} name= "SplashScreen" screenOptions={{ headerShown: false }} component={SplashScreen}/>
-      <Stack.Screen name='UserViewProductDetails' component={UserViewProductDetails} />
-      <Stack.Screen name='UserProductInfo' component={ProductDetails} />
-      <Stack.Screen name='shippingDetailsList' component={shippingDetailsList} />
-
-      <Stack.Screen name='UserAddShippingDetails' component={UserAddShippingDetails} />
-      <Stack.Screen name='ViewShippingDetails' component={ViewShippingDetails} />
-      <Stack.Screen name='EditShippingDetails' component={EditShippingDetails} />
-
+        <Stack.Screen options={{headerShown: false}}  name='UserViewProductDetails' component={UserStack} />
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />  
@@ -60,9 +54,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="AdminHome" component={AdminHomeScreen} />        
-      <Stack.Screen name='EditProfile' component={EditProfile} />
-      <Stack.Screen name='UserProfile' component={UserProfile} />      
+      <Stack.Screen name="AdminHome" component={AdminHomeScreen} />            
 
         
       </Stack.Navigator>

@@ -7,10 +7,10 @@ import { auth, fireStoreDB } from '../firebase';
 
 
 
-const shippingDetailsList = () => {
+const ShippingDetails = () => {
  
   const [ShippingInfo, setShippingInfo] = useState([]);
-  const user = {uid : '123456789'};
+  const user = auth.currentUser;
   const navigation = useNavigation();
 
     const getTasks = async () => {
@@ -23,19 +23,20 @@ const shippingDetailsList = () => {
           shippingArray.push({id: doc.id, data: doc.data()});
         });
         console.log(querySnapshot);
+        console.log(shippingArray);
         setShippingInfo(shippingArray)
         console.log(shippingArray);
         console.log("================================");
         console.log("================================");
   }
   useEffect(() => {
-    getTasks();
+    getTasks(); 
   }, []);
 
   return (
     <ImageBackground style={styles.container} source={require('../assets/kk.png')} blurRadius={8}>
       <View>
-      <Text> {"\n"}  {"\n"}  {"\n"}</Text>
+      <Text> {"\n"}  {"\n"}  {"\n"}</Text> 
 
       <FlatList
         data={ShippingInfo}
@@ -76,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default shippingDetailsList;
+export default ShippingDetails;
