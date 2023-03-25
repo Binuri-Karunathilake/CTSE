@@ -20,6 +20,7 @@ const UserShippingInfo = ({ item, id }) => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',

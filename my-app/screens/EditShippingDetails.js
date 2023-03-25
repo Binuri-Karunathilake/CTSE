@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
-
-import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fireStoreDB, storage } from '../firebase';
-import { async } from '@firebase/util';
-
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 

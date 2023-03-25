@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: '#2b6777',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: '#f2f2f2',
     marginVertical: 5,
     borderRadius: 10,
   },
@@ -51,17 +51,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#222',
+    color: '#ffffff',
   },
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#c45500',
+    color: '#c8d8e4',
     marginBottom: 10,
   },
   description: {
     fontSize: 14,
-    color: '#666',
+    color: '#f2f2f2',
   },
 });
 

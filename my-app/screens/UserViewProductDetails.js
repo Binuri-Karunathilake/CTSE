@@ -117,18 +117,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#c8d8e4',
   },
   searchInput: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#2b6777',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginBottom: 16,
-    backgroundColor: '#fff'
+    backgroundColor: '#ffffff',
   },
   productContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     flexDirection: 'row',
     padding: 16,
     marginBottom: 16,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     height: 80,
     marginRight: 10,
     padding: 10,
-    backgroundColor: 'red',
+    backgroundColor: '#f2f2f2',
   },
   productName: {
     fontSize: 20,
@@ -184,23 +185,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textTab: {
-    fontSize: 12
+    fontSize: 12,
   },
   btnTabActive: {
-    backgroundColor: '#2b6777'
+    backgroundColor: '#2b6777',
   },
   btnTabActiveText: {
     color: 'white',
-    fontWeight: '300'
-  },
-  productImageContainer : {
-
-  },
-  productImage : {
-
-  },
-  productTextContainer : {
-
+    fontWeight: '300',
   },
 });
 

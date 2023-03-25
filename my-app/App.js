@@ -6,7 +6,6 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfilePage from './screens/UserProfile';
 import ProductDetails from './screens/ProductDetails'
-import AddShippingDetails from './screens/AddShippingDetails'
 import OrdersPage from './screens/UserOrders'
 import UserAddShippingDetails from './screens/UserAddShippingDetails'
 import UserViewProductDetails from './screens/UserViewProductDetails'
