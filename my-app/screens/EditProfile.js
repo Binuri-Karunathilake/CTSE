@@ -125,7 +125,7 @@ style: "destructive"
           {image ? (
             <Image source={{ uri: image }} style={styles.avatar} />
           ) : (
-            <Image source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} style={styles.avatar} />
+            <Image source={{ uri: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg' }} style={styles.avatar} />
           )}
         </TouchableOpacity>
 
