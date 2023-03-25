@@ -13,12 +13,13 @@ import AdminProductPage from './screens/AdminProductPage';
 import ShoppingCartScreen from './screens/ShoppingCart';
 import CheckoutScreen from './screens/Checkout';
 import HelpScreen from './screens/ShoppingHelp';
+import FeedbackScreen from './screens/Feedback';
 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <CheckoutScreen/>
+      <ShoppingCartScreen/>
     </NavigationContainer>
   );
 }

@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const navigation = useNavigation();
-
 const ShoppingCartScreen = () => {
   const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Item 1', price: 10 },
-    { id: '2', name: 'Item 2', price: 20 },
-    { id: '3', name: 'Item 3', price: 30 },
+    { id: '1', name: 'Item 1', price: 10, quantity: 1 },
+    { id: '2', name: 'Item 2', price: 20, quantity: 1 },
+    { id: '3', name: 'Item 3', price: 30, quantity: 1 },
   ]);
 
   const handleUpdateItem = (itemId, newQuantity) => {
@@ -29,17 +27,18 @@ const ShoppingCartScreen = () => {
   const renderCartItem = ({ item }) => {
     return (
       <View style={styles.cartItem}>
-        <Text>{item.name}</Text>
-        <Text>{item.price}</Text>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
         <View style={styles.cartItemActions}>
           <TouchableOpacity onPress={() => handleUpdateItem(item.id, item.quantity + 1)}>
-            <Icon name="add" size={24} color="black" />
+            <Icon name="add" size={24} color="#555" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleUpdateItem(item.id, Math.max(0, item.quantity - 1))}>
-            <Icon name="remove" size={24} color="black" />
+          <Text style={styles.itemQuantity}>{item.quantity}</Text>
+          <TouchableOpacity onPress={() => handleUpdateItem(item.id, Math.max(1, item.quantity - 1))}>
+            <Icon name="remove" size={24} color="#555" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDeleteItem(item.id)}>
-            <Icon name="delete" size={24} color="red" />
+            <Icon name="delete" size={24} color="#f00" />
           </TouchableOpacity>
         </View>
       </View>
@@ -64,6 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#fff',
   },
   cartList: {
     flexGrow: 1,
@@ -77,6 +77,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
+  itemName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  itemPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  itemQuantity: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+    color: '#555',
+  },
   cartItemActions: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -84,3 +100,4 @@ const styles = StyleSheet.create({
 });
 
 export default ShoppingCartScreen;
+
