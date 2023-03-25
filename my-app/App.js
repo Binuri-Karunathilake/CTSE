@@ -19,7 +19,7 @@ import PaymentScreen from './screens/Payment';
 export default function App() {
   return (
     <NavigationContainer>
-      <CheckoutScreen/>
+      <ShoppingCartScreen/>
     </NavigationContainer>
   );
 }
