@@ -9,9 +9,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfilePage from './screens/UserProfile';
-// import AdminViewProductList from './screens/AdminViewProductList';
-// import AdminStack from './navigation/AdminStack';
-// import AdminProductPage from './screens/AdminProductPage';
+import AdminAddNewProduct from './screens/AdminAddNewProduct';
+import AdminViewProductList from './screens/AdminViewProductList';
+import AdminStack from './navigation/AdminStack';
+import AdminProductPage from './screens/AdminProductPage';
 import AdminHomeScreen from './screens/AdminHomeScreen';
 import EditProfile from './screens/EditProfile';
 import Login from './screens/LoginScreen';
@@ -20,22 +21,24 @@ import UserProfile from './screens/UserProfile';
 
 
 export default function App() {
+export default function App() {
   const [initilizing, setInitilizing] = useState(true);
   const [user, setUser] = useState();
+  const Stack = createNativeStackNavigator();
   const Stack = createNativeStackNavigator();
 
 
   return (
     <NavigationContainer>
-      <Stack.Navigator  screenOptions={{ detachInactiveScreens: true }}>
+      <Stack.Navigator>
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />  
-        {/* <Stack.Screen
+        <Stack.Screen
           name="AdminStack"
           component={AdminStack}
           options={{ headerShown: false }}
-        /> */}
+        />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="AdminHome" component={AdminHomeScreen} />        
       <Stack.Screen options={{headerShown: false}} name='EditProfile' component={EditProfile} />
