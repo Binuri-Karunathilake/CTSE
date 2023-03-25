@@ -4,37 +4,20 @@ import { useNavigation } from '@react-navigation/native';
 import {firebase}  from '../firebase'
 
 
-const HomeScreen = () => {
+
+const AdminHomeScreen = () => {
   const navigation = useNavigation();
-  const [name, setName] = useState('');
+  const [name, setName] = useState('')
 
-  useEffect(() =>{
-
-  }, [])
-
-
-// const handleLogout = () => {
-//   signOut(fireAuth).then(() => {
-//     alert("Signed out successfully !")
-//   }).catch((error) => {
-//     alert(error.message)
-//   });
-// }
-
-  // const fireAuth = auth;
-  // const user = fireAuth.currentUser;
-
-  
-  // useEffect( () => {
-  //   const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-  //       if(!user) {
-  //           navigation.replace('Login');
-  //       }
-  //   })
-  //   return unsubscribe
-  // }, [])
-  
-
+  const handleLogout = async () => {
+    try {
+        await firebase.auth().signOut();
+        // Navigate back to login screen
+        navigation.navigate('Login');
+    } catch (error) {
+        alert(error.message);
+    }
+};
   return (
     <View style={styles.listItemContainer}>
         <Text style={{fontSize: 20, fontWeight:"bold"}}>
@@ -49,20 +32,15 @@ const HomeScreen = () => {
       <View style={styles.logoutButtonContainer}>
         <TouchableOpacity 
         style={styles.logoutButton} 
-      onPress={() => {console.log("Logging Out");}}>
+        onPress= {() => handleLogout()}>
           <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-        style={styles.logoutButton} 
-      onPress={() => navigation.navigate('UserProfile')}>
-          <Text style={styles.logoutButtonText}>next</Text>
         </TouchableOpacity>
       </View>
     </View>
   )
 }
 
-export default HomeScreen
+export default AdminHomeScreen
 
 //styles
 const styles = StyleSheet.create({
