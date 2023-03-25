@@ -43,8 +43,8 @@ export default function App() {
         />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="AdminHome" component={AdminHomeScreen} />        
-      <Stack.Screen options={{headerShown: false}} name='EditProfile' component={EditProfile} />
-      <Stack.Screen options={{headerShown: false}} name='UserProfile' component={UserProfile} />      
+      <Stack.Screen name='EditProfile' component={EditProfile} />
+      <Stack.Screen name='UserProfile' component={UserProfile} />      
 
         
       </Stack.Navigator>

@@ -93,11 +93,11 @@ export default UserProfile = () => {
             <TouchableOpacity 
             style={[styles.buttonOutLine, styles.buttonContainer]}
             onPress={()=>navigation.navigate('EditProfile')}>
-              <Text>Edit</Text>
+              <Text style={styles.buttonOutlineText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
                   onPress={handleLogout}>
-              <Text>Logout</Text>
+              <Text style={styles.lgbuttonOutlineText}>Logout</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.form}>
@@ -130,7 +130,7 @@ export default UserProfile = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#2b6777',
     height: 200,
   },
   avatar: {
@@ -144,7 +144,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 130,
   },
+  lgbuttonOutlineText:{
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16
+  },
 
+  buttonOutlineText:{
+    color: '#2b6777',
+    fontWeight: '700',
+    fontSize: 16
+  }, 
   avatarContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -209,7 +219,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: 150,
     borderRadius: 10,
-    backgroundColor: '#10B981',
+    backgroundColor: '#2b6777',
   },
 
   btn: {
@@ -224,7 +234,7 @@ const styles = StyleSheet.create({
   buttonOutLine: {
     backgroundColor: 'white',
         marginTop: 5,
-        borderColor: '#10B981',
+        borderColor: '#2b6777',
         borderWidth: 2,
   },
   form: {

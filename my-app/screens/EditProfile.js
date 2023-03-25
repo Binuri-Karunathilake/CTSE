@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react'
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet, Alert } from 'react-native';
 // import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { auth, fireStoreDB } from '../firebase';
@@ -33,6 +33,17 @@ export default EditProfile = () => {
   };
 
   const handleDelete = async () => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete your profile?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
      try {
     const userRef = doc(fireStoreDB, "users", uID);
     await deleteDoc(userRef);
@@ -41,7 +52,12 @@ export default EditProfile = () => {
   } catch (error) {
     console.error("Error deleting document: ", error);
   }
-}
+},
+style: "destructive"
+        }
+      ]
+    );
+  };
   
   const fireAuth = auth;
   const LoggedInUser = fireAuth.currentUser;
@@ -121,11 +137,11 @@ export default EditProfile = () => {
             style={[styles.buttonOutLine, styles.buttonContainer]}
             onPress={handleSave}
             >
-              <Text>Save</Text>
+              <Text style={styles.buttonOutlineText}>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
+            <TouchableOpacity style={[styles.lgbuttonOutLine, styles.logoutButtonContainer]}
                   onPress={handleDelete}>
-              <Text>Delete</Text>
+              <Text style={styles.lgbuttonOutlineText}>Delete</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.form}>
@@ -170,9 +186,20 @@ export default EditProfile = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#2b6777',
     height: 200,
   },
+  lgbuttonOutlineText:{
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16
+  },
+
+  buttonOutlineText:{
+    color: '#2b6777',
+    fontWeight: '700',
+    fontSize: 16
+  }, 
   avatar: {
     width: 130,
     height: 130,
@@ -249,7 +276,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: 150,
     borderRadius: 10,
-    backgroundColor: '#10B981',
+    backgroundColor: 'red',
   },
 
   btn: {
@@ -264,7 +291,13 @@ const styles = StyleSheet.create({
   buttonOutLine: {
     backgroundColor: 'white',
         marginTop: 5,
-        borderColor: '#10B981',
+        borderColor: '#2b6777',
+        borderWidth: 2,
+  },
+  lgbuttonOutLine: {
+    backgroundColor: 'white',
+        marginTop: 5,
+        borderColor: '#b5443c',
         borderWidth: 2,
   },
   form: {
