@@ -57,39 +57,40 @@ const CheckoutScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 50
-,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  itemName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  itemPrice: {
-    fontSize: 18,
-  },
-  checkoutFormContainer: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 16,
-    fontSize: 18,
-  },
+//   container: {
+//     flex: 1,
+//     padding: 50
+// ,
+//   },
+//   itemContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     marginBottom: 16,
+//   },
+//   itemName: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+//   itemPrice: {
+//     fontSize: 18,
+//   },
+//   checkoutFormContainer: {
+//     flex: 1,
+//   },
+//   sectionTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 16,
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     borderRadius: 4,
+//     padding: 8,
+//     marginBottom: 16,
+//     fontSize: 18,
+//   },
+
 });
 
 export default CheckoutScreen;
