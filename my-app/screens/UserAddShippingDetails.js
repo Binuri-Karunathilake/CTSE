@@ -11,11 +11,7 @@ import { async } from '@firebase/util';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
-const genders = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
-  { label: 'Both', value: 'both' },
-];
+
 
 const UserAddShippingDetails = () => {
   const [name, setName] = useState('');
@@ -45,7 +41,7 @@ const UserAddShippingDetails = () => {
     try {
         const docRef = await addDoc(collection(fireStoreDB, "shippingDetails"), 
         {
-          userID : user.uid,
+          userId : user.uid,
           name: name,
           cno: cno,
           adress: adress,

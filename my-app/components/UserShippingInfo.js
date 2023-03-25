@@ -8,13 +8,14 @@ const UserShippingInfo = ({ item, id }) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("UserAddShippingDetails", {item, id})}}>
+    <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("ViewShippingDetails", {item, id})}}>
       <View style={styles.detailsContainer}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Text style={styles.name}>{item.name}</Text>
         </View>
-        <Text style={styles.description}>{item.description}</Text>
+        <Text style={styles.adress}>{item.adress}</Text>
       </View>
+      <Text>  {"\n"}  {"\n"}</Text>
     </TouchableOpacity>
   );
 };
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderBottomWidth: 1,
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     color: '#c45500',
     marginBottom: 10,
   },
-  description: {
+  adress: {
     fontSize: 14,
     color: '#666',
   },

@@ -13,20 +13,22 @@ import UserViewProductDetails from './screens/UserViewProductDetails'
 import UserProductInfo from './components/UserProductInfo';
 import UserShippingInfo from './components/UserShippingInfo';
 import shippingDetailsList from './screens/shippingDetailsList';
-
+import ViewShippingDetails from './screens/ViewShippingDetails';
+import EditShippingDetails from './screens/EditShippingDetails';
 // import AdminStack from './navigation/AdminStack';
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name='shippingDetailsList' component={shippingDetailsList} />
-
-
       <Stack.Screen name='UserViewProductDetails' component={UserViewProductDetails} />
       <Stack.Screen name='UserProductInfo' component={ProductDetails} />
+      <Stack.Screen name='shippingDetailsList' component={shippingDetailsList} />
+
       <Stack.Screen name='UserAddShippingDetails' component={UserAddShippingDetails} />
-      
+      <Stack.Screen name='ViewShippingDetails' component={ViewShippingDetails} />
+      <Stack.Screen name='EditShippingDetails' component={EditShippingDetails} />
+
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         

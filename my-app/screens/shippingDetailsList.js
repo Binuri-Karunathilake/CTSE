@@ -47,6 +47,8 @@ const shippingDetailsList = () => {
   return (
     <ImageBackground style={styles.container} source={require('../assets/kk.png')} blurRadius={8}>
       <View>
+      <Text> {"\n"}  {"\n"}  {"\n"}</Text>
+
       <FlatList
         data={ShippingInfo}
         extraData={ShippingInfo}
@@ -57,6 +59,7 @@ const shippingDetailsList = () => {
         keyExtractor={(item) => item.id.toString()}
       />
 
+<Text>  {"\n"}  {"\n"}</Text>
 
     <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("UserAddShippingDetails")}}>
         <Text style={styles.buttonText}>Add new Shopping Details</Text>

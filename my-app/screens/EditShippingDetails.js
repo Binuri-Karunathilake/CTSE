@@ -1,94 +1,87 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
-import { ActivityIndicator, RadioButton } from 'react-native-paper';
-import { FontAwesome5 } from '@expo/vector-icons';
-import {Picker} from '@react-native-picker/picker';
-import * as ImagePicker from 'expo-image-picker';
+
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fireStoreDB, storage } from '../firebase';
 import { async } from '@firebase/util';
-import { set } from 'react-native-reanimated';
+
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 
-
 const EditShippingDetails = ({route}) => {
     
-const {item, id} = route.params;
-console.log(id);
-console.log(item);
-const [name, setName] = useState('');
-const [description, setDescription] = useState('');
-const [zipcode, setZipcode] = useState();
-const [image, setImage] = useState(null);
-const [cno, setCno] = useState('');
-const [adress, setAdress] = useState('');
+    const {item, id} = route.params;
+    console.log(id);
+    console.log(item);
+    const [name, setName] = useState(item.name);
+    const [description, setDescription] = useState(item.description);
+    const [zipcode, setZipcode] = useState(item.zipcode);
+    const [image, setImage] = useState(null);
+    const [cno, setCno] = useState(item.cno);
+    const [adress, setAdress] = useState(item.adress);
+    
+      const navigation = useNavigation();
+      const user = {uid : '123456789'};
 
-  const navigation = useNavigation();
-  
- 
+      const handleSubmit = async () => {
+        await onSubmit({ name, cno, adress, zipcode, description });
+        setName('');
+        setCno('');
+        setAdress('');
+        setZipcode('');
+        setDescription('');
+      };
+    
+      const onSubmit = async () => {
+        console.log({name, cno, adress, zipcode, description});
+        try {
+            const docRef = await updateDoc(doc(fireStoreDB, "shippingDetails", id), 
+            {
+                userID : user.uid,
+                name: name,
+                cno: cno,
+                adress: adress,
+                zipcode: zipcode,
+                description: description,
+            });
+            console.log("Document edited");
+            navigation.navigate('UserViewProductDetails');
+        } catch (error) {
+          console.error("Error adding document: ", error.message);
+        }
+      };
+    
+      return (
+        <ScrollView style={styles.container}>
 
-   
-  }
-  const handleSubmit = async () => {
-    await onSubmit({ name, cno, adress, zipcode, description });
-    setName('');
-    setCno('');
-    setAdress('');
-    setZipcode('');
-    setDescription('');
-  };
+        <Text>  {"\n"}  {"\n"}</Text>
+          <Text style={styles.label}>Name:</Text>
+          <TextInput style={styles.input} value={name} onChangeText={setName} />
+          <Text style={styles.label}>Contact Number:</Text>
+          <TextInput style={styles.input} value={cno} onChangeText={setCno} />
+          <Text style={styles.label}>Adress:</Text>
+          <TextInput style={styles.input} value={adress} onChangeText={setAdress} />
+          <Text style={styles.label}>Zipcode:</Text>
+          <TextInput style={styles.input} value={zipcode} onChangeText={setZipcode} />      
+          <Text style={styles.label}>Description:</Text>
+          <TextInput
+            style={[styles.input, styles.textarea]}
+            value={description}
+            onChangeText={setDescription}
+            multiline={true}
+            numberOfLines={4}
+          />     
+           <Text>  {"\n"}  {"\n"}</Text>
 
-  const onSubmit = async () => {
-    console.log({name, cno, adress, zipcode, description});
-    try {
-        const docRef = await updateDoc(doc(fireStoreDB, "shippingDetails", id), 
-        {
-            userID : user.uid,
-            name: name,
-            cno: cno,
-            adress: adress,
-            zipcode: zipcode,
-            description: description,
-        });
-        console.log("Document edited");
-        navigation.navigate('UserViewProductDetails');
-    } catch (error) {
-      console.error("Error adding document: ", error.message);
-    }
-  };
-
-  return (
-    <ScrollView style={styles.container}>
-      {/* <View style={styles.header}>
-        <FontAwesome5 name="store" size={24} color="#007bff" />
-        <Text style={styles.title}>Add New Product</Text>
-      </View> */}
-      <Text style={styles.label}>Name:</Text>
-      <TextInput style={styles.input} value={name} onChangeText={setName} />
-      <Text style={styles.label}>Contact Number:</Text>
-      <TextInput style={styles.input} value={cno} onChangeText={cno} />
-      <Text style={styles.label}>Adress:</Text>
-      <TextInput style={styles.input} value={adress} onChangeText={setAdress} />
-      <Text style={styles.label}>Zipcode:</Text>
-      <TextInput style={styles.input} value={Zipcode} onChangeText={Zipcode} />      
-      <Text style={styles.label}>Description:</Text>
-      <TextInput
-        style={[styles.input, styles.textarea]}
-        value={description}
-        onChangeText={setDescription}
-        multiline={true}
-        numberOfLines={4}
-      />
-      
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Update Product</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
-
-
+          
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Edit and Confirm order</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      );
+    
+        };
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
@@ -195,5 +188,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 export default EditShippingDetails;

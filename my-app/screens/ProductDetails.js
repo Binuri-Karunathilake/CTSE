@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import SplashScreen from './SplashScreen';
 
 export default function App() {
@@ -34,12 +34,9 @@ export default function App() {
       
       </Text>
       <Text style={styles.productPrice}>LKR 8,486.45</Text>
-      <Button
-        title="Buy Now"
-        onPress={handleBuyNow}
-        color="#fff"
-        style={styles.button}
-      />
+      <TouchableOpacity style={[styles.button, ]} onPress={handleBuyNow}>
+  <Text style={styles.buttonText}>Buy Now</Text>
+</TouchableOpacity>
       <StatusBar style="auto" />
       {showSplash && <SplashScreen />}
     </View>
@@ -81,9 +78,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#c8d8e4',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#f2f2f2',
+    padding: 12,
     borderRadius: 10,
+    marginBottom: 30
+  },
+
+  buttonText: {
+    color: '#2b6777',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
