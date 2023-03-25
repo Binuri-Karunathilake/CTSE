@@ -172,6 +172,7 @@ style: "destructive"
                   style={styles.features} 
                   value={phoneNumber}
                   onChangeText={setphoneNumber}
+                  maxLength={10}
                  />
                 </View>
             </View>   

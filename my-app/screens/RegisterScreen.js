@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import {Image} from 'react-native';
 import { auth, fireStoreDB } from '../firebase';
@@ -21,6 +21,7 @@ const RegisterScreen = () => {
     const navigation = useNavigation()
     const user = auth.currentUser;
 
+    
 
     registerUser = async (fName, Lname, email, phoneNumber, password) => {
         // try {
@@ -52,90 +53,10 @@ const RegisterScreen = () => {
         
 
       }
-    
-
-      
-
-
-
-    // const [role, setRole] = useState('user');
-    // const fireAuth = auth;
-
-    // const navigation = useNavigation()
-
-    // useEffect(() => {
-    //     const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-    //         if (user) {
-    //             if (user.email === 'admin@example.com') {
-    //                 navigation.replace('AdminHome');
-    //             } else {
-    //                 navigation.replace('Home');
-    //             }
-    //         }
-    //     })
-    //     return unsubscribe
-    // }, [])
-    
-
-    // const handleSignUp = () => {
-    //     if (role === 'user') {
-    //         createUserWithEmailAndPassword(fireAuth, email, password)
-    //         .then(userCredentials => {
-    //             const user = userCredentials.user;
-    //             console.log(user);
-    //         })
-    //         .catch(error => {
-    //             alert(error.message);
-    //         })
-    //     } else if (role === 'admin') {
-    //         // add admin authentication code here
-    //         signInWithEmailAndPassword(fireAuth, 'admin@example.com', 'admin123')
-    //         .then(userCredentials => {
-    //           const user = userCredentials.user;
-    //           if (user) {
-    //             // Set isAdmin property to true in user object
-    //             user.isAdmin = true;
-    //             // Navigate to admin home screen
-    //             navigation.replace('AdminHome');
-    //           }
-    //         })
-    //         .catch(error => {
-    //           alert(error.message);
-    //         })
-    //     }
-    // }
-
-    // const handleLogin = () => {
-    //     if (role === 'user') {
-    //       signInWithEmailAndPassword(fireAuth, email, password)
-    //         .then(userCredentials => {
-    //           const user = userCredentials.user;
-    //           console.log('Logged in with : ' + user.email);
-    //         })
-    //         .catch(error => {
-    //           alert(error.message);
-    //         })
-    //     } else if (role === 'admin') {
-    //       const adminEmail = 'admin@example.com';
-    //       const adminPassword = 'admin123';
-    //       signInWithEmailAndPassword(fireAuth, adminEmail, adminPassword)
-    //         .then(userCredentials => {
-    //           const user = userCredentials.user;
-    //           if (user) {
-    //             // set isAdmin property to true in user object
-    //             user.isAdmin = true;
-    //           }
-    //           console.log('Logged in as admin');
-    //         })
-    //         .catch(error => {
-    //           alert(error.message);
-    //         })
-    //     }
-    //   }
-      
 
   return (
-    <KeyboardAvoidingView
+    <ScrollView>
+        <View
     style={styles.container}
     behavior="height">
         <Image style={styles.logo} resizeMode="cover" source ={require("../assets/Logo.png")}/>
@@ -160,6 +81,7 @@ const RegisterScreen = () => {
                 keyboardType='number-pad'
                 onChangeText={phoneNumber => {setphoneNumber(phoneNumber)}}
                 autoCorrect={false}
+                maxLength={10}
                 style={styles.input} />
 
             <TextInput
@@ -206,7 +128,8 @@ const RegisterScreen = () => {
                 </Text>
             </TouchableOpacity>
         </View>
-    </KeyboardAvoidingView>
+        </View>
+    </ScrollView>
   )
 }
 
@@ -271,7 +194,8 @@ const styles = StyleSheet.create({
     logo: {
         width: 150,
         height: 150,
-        marginBottom: 60
+        marginBottom: 80,
+        marginTop:20
     }
     
 })
