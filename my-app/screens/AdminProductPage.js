@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 5,
+    maxWidth: 250
   },
   subtitle: {
     fontSize: 16,
@@ -140,7 +141,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#b5443c'
+    borderColor: '#b5443c',
+    height: 35
   },
   price: {
     fontSize: 18,
