@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import {Image} from 'react-native';
 import { auth, fireStoreDB } from '../firebase';
@@ -17,43 +17,39 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [phoneNumber, setphoneNumber] = useState ('');
     const [password, setPassword] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [emailError, setEmailError] = useState('');
 
     const navigation = useNavigation()
     const user = auth.currentUser;
 
+    
 
-    registerUser = async (fName, Lname, email, phoneNumber, password) => {
-        // await firebase.auth().createUserWithEmailAndPassword(email, password)
-        //   .then(() => {
-        //     firebase.auth().currentUser.sendEmailVerification({
+    // registerUser = async (fName, Lname, email, phoneNumber, password) => {
+        registerUser = async () => {
+            if (!/^\d{10}$/.test(phoneNumber.trim())) {
+                setPhoneError('Please enter a valid phone number');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+                setEmailError('Please enter a valid email address');
+                return;
+            }
+
+    // try {
+        //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        //     const user = userCredential.user;
+        
+        //     // Send email verification
+        //     await sendEmailVerification(user, {
+        //       url: "https://reactapp-cea8f.firebaseapp.com",
         //       handleCodeInApp: true,
-        //       url: 'https://reactapp-cea8f.firebaseapp.com',
-        //     })
-        //       .then(() => {
-        //         alert('Verification email sent')
-        //       }).catch((error) => {
-        //         alert(error.message)
-        //       })
-        //       .then(() => {
-        //         firebase.firestore().collection('users')
-        //           .doc(firebase.auth().currentUser.uid)
-        //           .set({
-        //             fName,
-        //             Lname,
-        //             email,
-        //             phoneNumber,
-        //           })
-        //       })
-        //       .catch((error) => {
-        //         alert(error.message)
-        //       })
-        //   })
-        //   .catch((error => {
-        //     alert(error.message)
-        //   }))
+        //     });
+        //     alert("Verification email sent");
         try {
           const regUser = await createUserWithEmailAndPassword(auth, email, password)
           console.log(regUser.user.uid);
+          // Store user data in Firestore
           const docRef = await addDoc(collection(fireStoreDB, "users"), 
           {
             userId: regUser.user.uid,
@@ -69,90 +65,10 @@ const RegisterScreen = () => {
         
 
       }
-    
-
-      
-
-
-
-    // const [role, setRole] = useState('user');
-    // const fireAuth = auth;
-
-    // const navigation = useNavigation()
-
-    // useEffect(() => {
-    //     const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-    //         if (user) {
-    //             if (user.email === 'admin@example.com') {
-    //                 navigation.replace('AdminHome');
-    //             } else {
-    //                 navigation.replace('Home');
-    //             }
-    //         }
-    //     })
-    //     return unsubscribe
-    // }, [])
-    
-
-    // const handleSignUp = () => {
-    //     if (role === 'user') {
-    //         createUserWithEmailAndPassword(fireAuth, email, password)
-    //         .then(userCredentials => {
-    //             const user = userCredentials.user;
-    //             console.log(user);
-    //         })
-    //         .catch(error => {
-    //             alert(error.message);
-    //         })
-    //     } else if (role === 'admin') {
-    //         // add admin authentication code here
-    //         signInWithEmailAndPassword(fireAuth, 'admin@example.com', 'admin123')
-    //         .then(userCredentials => {
-    //           const user = userCredentials.user;
-    //           if (user) {
-    //             // Set isAdmin property to true in user object
-    //             user.isAdmin = true;
-    //             // Navigate to admin home screen
-    //             navigation.replace('AdminHome');
-    //           }
-    //         })
-    //         .catch(error => {
-    //           alert(error.message);
-    //         })
-    //     }
-    // }
-
-    // const handleLogin = () => {
-    //     if (role === 'user') {
-    //       signInWithEmailAndPassword(fireAuth, email, password)
-    //         .then(userCredentials => {
-    //           const user = userCredentials.user;
-    //           console.log('Logged in with : ' + user.email);
-    //         })
-    //         .catch(error => {
-    //           alert(error.message);
-    //         })
-    //     } else if (role === 'admin') {
-    //       const adminEmail = 'admin@example.com';
-    //       const adminPassword = 'admin123';
-    //       signInWithEmailAndPassword(fireAuth, adminEmail, adminPassword)
-    //         .then(userCredentials => {
-    //           const user = userCredentials.user;
-    //           if (user) {
-    //             // set isAdmin property to true in user object
-    //             user.isAdmin = true;
-    //           }
-    //           console.log('Logged in as admin');
-    //         })
-    //         .catch(error => {
-    //           alert(error.message);
-    //         })
-    //     }
-    //   }
-      
 
   return (
-    <KeyboardAvoidingView
+    <ScrollView>
+        <View
     style={styles.container}
     behavior="height">
         <Image style={styles.logo} resizeMode="cover" source ={require("../assets/Logo.png")}/>
@@ -175,17 +91,25 @@ const RegisterScreen = () => {
                 placeholder='Phone Number'
                 value={phoneNumber}
                 keyboardType='number-pad'
-                onChangeText={phoneNumber => {setphoneNumber(phoneNumber)}}
+                onChangeText={phoneNumber => {
+                    setphoneNumber(phoneNumber);
+                    setPhoneError('');
+                }}
                 autoCorrect={false}
                 style={styles.input} />
+                {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
 
             <TextInput
                 placeholder='Email'
                 value={email}
-                onChangeText={email => {setEmail(email)}}
+                onChangeText={email => {
+                    setEmail(email);
+                    setEmailError('');
+                }}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 style={styles.input} />
+                {emailError? <Text style={styles.errorText}>{emailError}</Text> : null}
             <TextInput
                 style={styles.input} 
                 placeholder='Password'
@@ -223,7 +147,8 @@ const RegisterScreen = () => {
                 </Text>
             </TouchableOpacity>
         </View>
-    </KeyboardAvoidingView>
+        </View>
+    </ScrollView>
   )
 }
 
@@ -288,7 +213,15 @@ const styles = StyleSheet.create({
     logo: {
         width: 150,
         height: 150,
-        marginBottom: 60
-    }
+        marginBottom: 80,
+        marginTop:20
+    },
+    errorText: {
+        fontSize: 14,
+        marginTop: 8,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color:'#b5443c',
+      },
     
 })
