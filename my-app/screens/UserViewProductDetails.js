@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, TextInput, View, StyleSheet, Dimensions, Image } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import UserProductInfo from '../components/UserProductInfo';
+import { fireStoreDB } from '../firebase';
 
 const PRODUCTS = [
   {
@@ -62,7 +64,7 @@ const statuses = [
 const UserViewProductDetails = () => {
   const [searchText, setSearchText] = useState('');
   const [type, setType] = useState('All');
-  const [products, setProducts] = useState(PRODUCTS);
+  const [products, setProducts] = useState([]);
 
   const fiterProducts = (status) => {
     if(status !== 'All') {
@@ -86,13 +88,29 @@ const UserViewProductDetails = () => {
     );
   };
 
-  const filteredProducts = PRODUCTS.filter((product) => {
-    if(type === 'All') {
-      return product.name.toLowerCase().includes(searchText.toLowerCase());
-    } else {
-      return product.name.toLowerCase().includes(searchText.toLowerCase()) && product.type.toLowerCase().includes(type.toLowerCase());
-    }
+  const filteredProducts = products.filter((product) => {
+
+      return product.data.name.toLowerCase().includes(searchText.toLowerCase())
+    
   });
+
+  const getProducts = async () => {
+    const productRef = collection(fireStoreDB, "products");
+    // Create a query against the collection.
+      const querySnapshot = await getDocs(productRef);
+      let returnedProducts = [];
+      querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+        returnedProducts.push({id: doc.id, data: doc.data()});
+      });
+      console.log(returnedProducts);
+      setProducts(returnedProducts)
+      console.log(products);
+  }
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -105,9 +123,10 @@ const UserViewProductDetails = () => {
   
       <FlatList
         data={filteredProducts}
+        extraData={filteredProducts}
         renderItem={({item, index}) => {
           console.log(item);
-          return(<UserProductInfo item={item}/>)
+          return(<UserProductInfo item={item.data}/>)
         }}
         keyExtractor={(item) => item.id.toString()}
       />

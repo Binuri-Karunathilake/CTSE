@@ -5,6 +5,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 const UserProductInfo = ({ item }) => {
 
   const navigation = useNavigation();
+  console.log(item);
 
   return (
     <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("ProductDetails", {item})}}>
