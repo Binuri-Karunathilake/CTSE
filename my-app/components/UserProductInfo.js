@@ -9,7 +9,7 @@ const UserProductInfo = ({ item }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => {navigation.navigate("UserProductInfo", {item})}}>
       <View style={styles.imageContainer}>
-        <Image source={require('../assets/kk.png')} style={styles.image} />
+        <Image source={{uri: item.image}} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.name}>{item.name}</Text>

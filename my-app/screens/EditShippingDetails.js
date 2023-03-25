@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
-import { fireStoreDB, storage } from '../firebase';
-import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import { Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { fireStoreDB } from '../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -13,7 +13,6 @@ const EditShippingDetails = ({route}) => {
     const [name, setName] = useState(item.name);
     const [description, setDescription] = useState(item.description);
     const [zipcode, setZipcode] = useState(item.zipcode);
-    const [image, setImage] = useState(null);
     const [cno, setCno] = useState(item.cno);
     const [adress, setAdress] = useState(item.adress);
     

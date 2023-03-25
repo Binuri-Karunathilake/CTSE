@@ -14,7 +14,7 @@ export default function App() {
     setTimeout(() => {
       setShowSplash(false);
       navigaiton.navigate('shippingDetailsList');
-    }, 3000);
+    }, 2000);
   };
 
   return (

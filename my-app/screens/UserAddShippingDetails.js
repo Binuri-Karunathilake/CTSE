@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
-// import { ActivityIndicator, RadioButton } from 'react-native-paper';
-import { FontAwesome5 } from '@expo/vector-icons';
-// import {Picker} from '@react-native-picker/picker';
-// import * as ImagePicker from 'expo-image-picker';
-import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet,  ScrollView } from 'react-native';
 import { fireStoreDB, storage } from '../firebase';
-import { async } from '@firebase/util';
-// import { set } from 'react-native-reanimated';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,7 +10,6 @@ const UserAddShippingDetails = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [zipcode, setZipcode] = useState();
-  const [image, setImage] = useState(null);
   const [cno, setCno] = useState('');
   const [adress, setAdress] = useState('');
 
@@ -59,14 +51,8 @@ const UserAddShippingDetails = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* <View style={styles.header}>
-        <FontAwesome5 name="store" size={24} color="#007bff" />
-        <Text style={styles.title}>Add New Product</Text>
-      </View> */}
-
-<Text style={styles.label}>{'\n'}{'\n'}</Text>      
-
-<Text style={styles.label}>Name:</Text>
+      <Text style={styles.label}>{'\n'}{'\n'}</Text>      
+      <Text style={styles.label}>Name:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text style={styles.label}>Contact Number:</Text>
       <TextInput style={styles.input} value={cno} onChangeText={setCno} />
@@ -74,9 +60,8 @@ const UserAddShippingDetails = () => {
       <TextInput style={styles.input} value={adress} onChangeText={setAdress} />
       <Text style={styles.label}>Zipcode:</Text>
       <TextInput style={styles.input} value={zipcode} onChangeText={setZipcode} />
-    
-      
       <Text style={styles.label}>Landmark(optional):</Text>
+
       <TextInput
         style={[styles.input, styles.textarea]}
         value={description}
@@ -84,7 +69,6 @@ const UserAddShippingDetails = () => {
         multiline={true}
         numberOfLines={4}
       />
-    
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Place Order</Text>
       </TouchableOpacity>
@@ -98,49 +82,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#c8d8e4',
   },
-  addImage: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
-    
-  },
-  buttonAdd: {
-    borderColor: '#2b6777',
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 10,
-    marginBottom: 30,
-    width: 150
-  },
-  buttonUpload: {
-    backgroundColor: '#3b7330',
-    padding: 5,
-    borderRadius: 5,
-    marginBottom: 30,
-    width: 100,
-    maxHeight: 30
-  },
-  buttonClear: {
-    backgroundColor: '#69070e',
-    padding: 5,
-    borderRadius: 5,
-    marginBottom: 30,
-    width: 100,
-    maxHeight: 30
-  },
-  buttonText1: {
-    color: '#fff',
-    fontSize: 15,
-    textAlign: 'center',
-    fontWeight: '500'
-  },
-  buttonText2: {
-    color: '#2b6777',
-    fontSize: 15,
-    textAlign: 'center',
-    fontWeight: '500'
-  },
+
   label: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -161,30 +103,7 @@ const styles = StyleSheet.create({
   textarea: {
     height: 100,
   },
-  radioContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  radioGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 15,
-    marginVertical: 10
-  },
-  radioButton: {
-    textAlign: 'center'
-  },
-  radioLabel: {
-    fontSize: 16,
-    marginLeft: 8,
-    color: '#333',
-    textAlign: 'center',
-  },
-  radioIcon: {
-    width: 24,
-    height: 24,
-  },
+
   button: {
     backgroundColor: '#2b6777',
     padding: 12,
