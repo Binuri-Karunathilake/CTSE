@@ -7,8 +7,8 @@ const PaymentScreen = () => {
   const [cvv, setCvv] = useState('');
 
   const handlePayment = () => {
-    // handle payment logic here
-    alert('Payment successful!');
+    // handle payment
+    alert('Payment successful! Thank you for your order');
   };
 
   return (
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 20,
+    padding: 50,
   },
   paymentDetails: {
     marginBottom: 20,

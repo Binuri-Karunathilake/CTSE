@@ -32,6 +32,7 @@ const HelpScreen = () => {
   );
 };
 
+// styles for the help screen
 const styles = StyleSheet.create({
     container: {
       flex: 1,

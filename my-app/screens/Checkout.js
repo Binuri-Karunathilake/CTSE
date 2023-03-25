@@ -2,18 +2,31 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 
 const CheckoutScreen = () => {
+// Declare variables for the input fields
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
 
+// Function to handle the checkout button press
   const handleCheckout = () => {
-    alert(`Thank you for your order, ${firstName} ${lastName}!`);
+    alert(`Are you sure want to continue!`);
   };
+//   const handleCheckout = () => {
+//     alert(`Thank you for your order, ${firstName} ${lastName}!`);
+//   };
 
   return (
     <View style={styles.container}>
       <View style={styles.itemContainer}>
-        <Text style={styles.itemName}>Product Name</Text>
+        <Text style={styles.itemName}>Item 1</Text>
+        <Text style={styles.itemPrice}>$9.99</Text>
+      </View>
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemName}>Item 2</Text>
+        <Text style={styles.itemPrice}>$9.99</Text>
+      </View>
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemName}>Item 3</Text>
         <Text style={styles.itemPrice}>$9.99</Text>
       </View>
       <View style={styles.checkoutFormContainer}>
@@ -46,35 +59,36 @@ const CheckoutScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 50
+,
   },
   itemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   itemName: {
     fontSize: 18,
     fontWeight: 'bold',
   },
   itemPrice: {
-    fontSize: 16,
+    fontSize: 18,
+  },
+  checkoutFormContainer: {
+    flex: 1,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  checkoutFormContainer: {
-    marginTop: 20,
+    marginBottom: 16,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 16,
+    fontSize: 18,
   },
 });
 

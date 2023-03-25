@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+// state to hold cart items, initialized with some example items
 const ShoppingCartScreen = () => {
   const [cartItems, setCartItems] = useState([
     { id: '1', name: 'Item 1', price: 10, quantity: 1 },
     { id: '2', name: 'Item 2', price: 20, quantity: 1 },
     { id: '3', name: 'Item 3', price: 30, quantity: 1 },
+    { id: '1', name: 'Item 1', price: 10, quantity: 1 },
+    { id: '2', name: 'Item 2', price: 20, quantity: 1 },
+    { id: '3', name: 'Item 3', price: 30, quantity: 1 },
+    { id: '1', name: 'Item 1', price: 10, quantity: 1 },
+    { id: '2', name: 'Item 2', price: 20, quantity: 1 },
+    { id: '3', name: 'Item 3', price: 30, quantity: 1 },
   ]);
 
- 
+  //update the quantity of a cart item
   const handleUpdateItem = (itemId, newQuantity) => {
     setCartItems(prevItems => {
       const updatedItems = [...prevItems];
@@ -19,12 +26,14 @@ const ShoppingCartScreen = () => {
     });
   };
 
+  //delete a cart item
   const handleDeleteItem = itemId => {
     setCartItems(prevItems => {
       return prevItems.filter(item => item.id !== itemId);
     });
   };
 
+ //render a single cart item
   const renderCartItem = ({ item }) => {
     return (
     
@@ -47,7 +56,7 @@ const ShoppingCartScreen = () => {
     );
   };
   
-
+  // render the shopping cart screen
   return (
     <View style={styles.container}>
       <FlatList
@@ -61,6 +70,7 @@ const ShoppingCartScreen = () => {
   );
 };
 
+// styles for the shopping cart screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,

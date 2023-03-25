@@ -19,7 +19,7 @@ import PaymentScreen from './screens/Payment';
 export default function App() {
   return (
     <NavigationContainer>
-      <ShoppingCartScreen/>
+      <CheckoutScreen/>
     </NavigationContainer>
   );
 }
@@ -29,6 +29,7 @@ const Stack = createNativeStackNavigator();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 50,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
