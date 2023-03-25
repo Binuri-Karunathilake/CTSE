@@ -32,14 +32,17 @@ export default EditProfile = () => {
 
   };
 
-    const handleLogout = () => {
-    // handle logout logic
-    signOut(fireAuth).then(() => {
-      alert("Signed out successfully !")
-    }).catch((error) => {
-      alert(error.message)
-    });
-  };
+  const handleDelete = async () => {
+     try {
+    const userRef = doc(fireStoreDB, "users", uID);
+    await deleteDoc(userRef);
+    await LoggedInUser.delete(); // This will delete the user from Firebase authentication
+    navigation.replace('Login');
+  } catch (error) {
+    console.error("Error deleting document: ", error);
+  }
+}
+  
   const fireAuth = auth;
   const LoggedInUser = fireAuth.currentUser;
 
@@ -102,13 +105,7 @@ export default EditProfile = () => {
   <ScrollView>
     <View style={styles.container}>
       <View style={styles.header}></View>
-      {/* <Image
-        style={styles.avatar}
-        source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }}
-        
-      />
-           */}
- <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
+       <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
           {image ? (
             <Image source={{ uri: image }} style={styles.avatar} />
           ) : (
@@ -119,7 +116,6 @@ export default EditProfile = () => {
       <View style={styles.body}>
         <View style={styles.bodyContent}>
           <Text style={styles.name}>{fName + ' ' + Lname}</Text>
-      
           <View style={styles.btn}>
             <TouchableOpacity 
             style={[styles.buttonOutLine, styles.buttonContainer]}
@@ -128,8 +124,8 @@ export default EditProfile = () => {
               <Text>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
-                  onPress={handleLogout}>
-              <Text>Logout</Text>
+                  onPress={handleDelete}>
+              <Text>Delete</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.form}>
@@ -140,7 +136,6 @@ export default EditProfile = () => {
                   style={styles.paragraph} 
                   value={fName}
                   onChangeText={setfName}
-                    // const [firstName, lastName] = text.trim().split(' ');
                  />
                 </View>
                 <Text style={styles.questions}>Last Name : </Text>
@@ -163,10 +158,6 @@ export default EditProfile = () => {
                   onChangeText={setphoneNumber}
                  />
                 </View>
-                {/* <Text style={styles.questions}>Address : </Text>
-                <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph}>{address}</TextInput>
-                </View>  */}
             </View>   
           </View>
         </View>
