@@ -10,6 +10,8 @@ import EditShippingDetails from '../screens/EditShippingDetails';
 import ViewShippingDetails from '../screens/ViewShippingDetails';
 import ProductDetails from '../screens/ProductDetails';
 import { MaterialIcons } from '@expo/vector-icons';
+import { HeaderBackButton } from '@react-navigation/stack';
+
 
 const UserStack = () => {
 
@@ -18,10 +20,15 @@ const UserStack = () => {
   return (
     <Tab.Navigator screenOptions={{unmountOnBlur: true}} >
         <Tab.Screen name='UserViewProductDetails' component={UserViewProductDetails} options={{ title: 'Product Details', tabBarIcon: ({color}) => (
-            <MaterialIcons  name='storefront' size={22} color={color} />
+            <MaterialIcons  name='menu' size={22} color={color} />
+
+            
         )
         }} />
-        <Tab.Screen name='UserProfile' component={UserProfile} />
+        <Tab.Screen name='UserProfile' component={UserProfile} options={{ title: 'UserProfile', tabBarIcon: ({color}) => (
+            <MaterialIcons  name='account-circle' size={22} color={color} />    
+        )
+        }} />
         <Tab.Screen name='EditProfile' component={EditProfile} options={{
                   tabBarItemStyle: { display: 'none' }, title: 'Edit Profile'
         }}/>

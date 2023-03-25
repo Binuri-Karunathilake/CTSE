@@ -55,7 +55,7 @@ const UserAddShippingDetails = () => {
       <Text style={styles.label}>Name:</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text style={styles.label}>Contact Number:</Text>
-      <TextInput style={styles.input} value={cno} onChangeText={setCno} />
+      <TextInput style={styles.input} value={cno} onChangeText={setCno} keyboardType='number-pad' />
       <Text style={styles.label}>Adress:</Text>
       <TextInput style={styles.input} value={adress} onChangeText={setAdress} />
       <Text style={styles.label}>Zipcode:</Text>
