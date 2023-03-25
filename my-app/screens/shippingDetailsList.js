@@ -60,85 +60,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#2b6777', 
+    backgroundColor: '#52ab98',
   },
-  
-  searchInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 16,
-    backgroundColor: '#c8d8e4', 
-  },
-  productContainer: {
-    backgroundColor: '#ffffff', 
-    flexDirection: 'row',
-    padding: 16,
-    marginBottom: 16,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  productImage: {
-    width: 80,
-    height: 80,
-    marginRight: 10,
-    padding: 10,
-    backgroundColor: '#f2f2f2',
-  },
-  productName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  productBrand: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  productPrice: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  productGender: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  productDescription: {
-    fontSize: 16,
-  },
-  listTab: {
-    flexDirection: 'row',
-    alignSelf: 'center',
-    marginBottom: 20,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  btnTab: {
-    width: Dimensions.get('window').width/ 4.5,
-    flexDirection: 'row',
-    borderRadius: 20,
-    padding: 5,
-    justifyContent: 'center',
-  },
-  textTab: {
-    fontSize: 12
-  },
-  btnTabActive: {
-    backgroundColor: '#52ab98', 
-  },
-  btnTabActiveText: {
-    color: 'white',
-    fontWeight: '300'
-  },
-
   button: {
     backgroundColor: '#2b6777',
     padding: 12,

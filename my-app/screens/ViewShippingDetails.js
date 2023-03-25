@@ -67,7 +67,7 @@ const AdminProductPage = ({route}) => {
 
     try {
       await deleteDoc(doc(fireStoreDB, 'shippingDetails', id));
-      navigation.navigate('shippingDetailsList')
+      navigation.navigate('UserViewProductDetails')
     } catch (error) {
       alert(error.message);
     }

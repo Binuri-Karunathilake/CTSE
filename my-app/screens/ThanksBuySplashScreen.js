@@ -6,6 +6,7 @@ const ThanksBuySplashScreen = () => {
   return (
     <View style={styles.container}>
       <FontAwesome5 name="thumbs-up" size={72} color="#2b6777" />
+      
       <ActivityIndicator size="large" color="#2b6777" style={styles.activityIndicator} />
     </View>
   );
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   activityIndicator: {
-    marginTop: 20,
+    marginTop: 0,
   },
 });
 
