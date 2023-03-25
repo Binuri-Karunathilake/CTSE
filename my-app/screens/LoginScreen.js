@@ -89,6 +89,7 @@ const LoginScreen = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState(false);
 
 
     const loginUser = async (email, password) => {
@@ -127,7 +128,7 @@ const LoginScreen = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             console.log(user);
-            if(user.email === 'hello@gmail.com') {
+            if(user && user.email === 'hello@gmail.com') {
                 navigation.replace('AdminStack');
             } 
             else if (user) {
@@ -141,7 +142,7 @@ const LoginScreen = () => {
         <KeyboardAvoidingView
             style={styles.container}
             behavior="height">
-            <Image style={styles.logo} resizeMode="cover" source ={require("../assets/images/Welcome.jpg")}/>
+            <Image style={styles.logo} resizeMode="cover" source ={require("../assets/Logo.png")}/>
             {/* <PageTitle>Sign In</PageTitle> */}
             <View style={styles.inputContainer}>
                 <TextInput
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: '#0782F9',
+        backgroundColor: '#2b6777',
         width: '100%',
         padding: 15,
         borderRadius: 10,
@@ -232,13 +233,13 @@ const styles = StyleSheet.create({
     buttonOutline : {
         backgroundColor: 'white',
         marginTop: 5,
-        borderColor: '#0782F9',
+        borderColor: '#2b6777',
         borderWidth: 2
 
     },
 
     buttonOutlineText : {
-        color: '#0782F9',
+        color: '#2b6777',
         fontWeight: '700',
         fontSize: 16
     },

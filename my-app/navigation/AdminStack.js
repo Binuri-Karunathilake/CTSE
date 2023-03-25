@@ -9,6 +9,7 @@ import CustomDrawer from '../components/CustomDrawer';
 import { Ionicons, FontAwesome5, MaterialIcons  } from '@expo/vector-icons';
 import AdminProductPage from '../screens/AdminProductPage';
 import AdminEditProduct from '../screens/AdminEditProduct';
+import UserManagement from '../screens/UserManagement';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -36,7 +37,7 @@ const AdminStack = () => {
             <MaterialIcons  name='add-business' size={22} color={color} />
           )
         }} />
-        <Drawer.Screen name='User Management' component={AdminAddNewProduct} options={{
+        <Drawer.Screen name='User Management' component={UserManagement} options={{
           drawerIcon: ({color}) => (
             <FontAwesome5 name='users-cog' size={20} color={color} />
           )

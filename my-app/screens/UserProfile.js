@@ -2,9 +2,10 @@ import React, {useState,useEffect} from 'react'
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 // import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'expo-image-picker';
-import {firebase}  from '../firebase'
 import { useNavigation } from '@react-navigation/native';
-
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth, fireStoreDB } from '../firebase';
 
 export default UserProfile = () => {
   // Replace these with your own user information
@@ -13,11 +14,52 @@ export default UserProfile = () => {
   const [email, setEmail] = useState ('');
   const [phoneNumber,setphoneNumber] = useState ('');
   const [image, setImage] = useState (null);
+  const [currentUser, setCurrentUser] = useState();
   const navigation = useNavigation()
 
-  // const user = auth.currentUser;
-  // console.log(user);
-  // console.log(user.uid);
+    
+  const handleLogout = () => {
+    // handle logout logic
+    signOut(fireAuth).then(() => {
+      alert("Signed out successfully !")
+    }).catch((error) => {
+      alert(error.message)
+    });
+  };
+  const fireAuth = auth;
+  const LoggedInUser = fireAuth.currentUser;
+  
+  const getUser = async () => {
+    const userRef = collection(fireStoreDB, "users");
+  // Create a query against the collection.
+    const user = query(userRef, where("userId", "==", LoggedInUser.uid));
+    const querySnapshot = await getDocs(user);
+    let returnedUser = {};
+    querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+
+      returnedUser = {id: doc.id, data: doc.data()};
+    });
+    console.log(returnedUser.data);
+    setCurrentUser(returnedUser.data)
+    console.log("=================================");
+    setEmail(returnedUser.data.email);
+    setfName(returnedUser.data.fName);
+    setphoneNumber(returnedUser.data.phoneNumber);
+    setLname(returnedUser.data.Lname);
+
+
+  }
+  useEffect( () => {
+    getUser();
+    const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
+        if(!user) {
+            navigation.replace('Login');
+        }
+    })
+    return unsubscribe
+  }, [])
+  
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,40 +74,10 @@ export default UserProfile = () => {
 
   };
 
-  useEffect(() => {
-    const uid = firebase.auth().currentUser.uid;
-    firebase.firestore().collection('users').doc(uid).get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          const { fName, Lname, email, phoneNumber, address } = snapshot.data();
-          setfName(fName);
-          setLname(Lname);
-          setEmail(email);
-          setphoneNumber(phoneNumber);
-          // setAddress(address);
-        } else {
-          console.log('User does not exist');
-        }
-      })
-      .catch((error) => {
-        console.log('Error fetching user data:', error);
-      });
-  }, []);
-
-  const handleLogout = () => {
-    firebase.auth().signOut();
-  };
-
   return (
   <ScrollView>
     <View style={styles.container}>
       <View style={styles.header}></View>
-      {/* <Image
-        style={styles.avatar}
-        source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }}
-        
-      />
-           */}
  <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
           {image ? (
             <Image source={{ uri: image }} style={styles.avatar} />
@@ -77,27 +89,26 @@ export default UserProfile = () => {
       <View style={styles.body}>
         <View style={styles.bodyContent}>
           <Text style={styles.name}>{fName} {Lname}</Text>
-          {/* <Text style={styles.info}>UX Designer / Mobile developer</Text>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis,
-            omittam deseruisse consequuntur ius an,
-          </Text> */}
           <View style={styles.btn}>
             <TouchableOpacity 
             style={[styles.buttonOutLine, styles.buttonContainer]}
             onPress={()=>navigation.navigate('EditProfile')}>
-              <Text>Edit</Text>
+              <Text style={styles.buttonOutlineText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
                   onPress={handleLogout}>
-              <Text>Logout</Text>
+              <Text style={styles.lgbuttonOutlineText}>Logout</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.form}>
             <View style={styles.container1}>
-                <Text style={styles.questions}>Name : </Text>
+                <Text style={styles.questions}>First Name : </Text>
                 <View style={styles.textcontainer}>
-                  <Text style={styles.paragraph}>{`${fName} ${Lname}`} </Text>
+                  <Text style={styles.paragraph}>{fName}</Text>
+                </View>
+                <Text style={styles.questions}>Last Name : </Text>
+                <View style={styles.textcontainer}>
+                  <Text style={styles.paragraph}>{Lname}</Text>
                 </View>
                 <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>
@@ -107,10 +118,6 @@ export default UserProfile = () => {
                 <View style={styles.textcontainer}>
                   <Text style={styles.features}>{phoneNumber} </Text>
                 </View>
-                {/* <Text style={styles.questions}>Address : </Text>
-                <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph} value={address} />
-                </View>  */}
             </View>   
           </View>
         </View>
@@ -123,7 +130,7 @@ export default UserProfile = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#2b6777',
     height: 200,
   },
   avatar: {
@@ -137,7 +144,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 130,
   },
+  lgbuttonOutlineText:{
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16
+  },
 
+  buttonOutlineText:{
+    color: '#2b6777',
+    fontWeight: '700',
+    fontSize: 16
+  }, 
   avatarContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -202,7 +219,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: 150,
     borderRadius: 10,
-    backgroundColor: '#10B981',
+    backgroundColor: '#2b6777',
   },
 
   btn: {
@@ -217,7 +234,7 @@ const styles = StyleSheet.create({
   buttonOutLine: {
     backgroundColor: 'white',
         marginTop: 5,
-        borderColor: '#10B981',
+        borderColor: '#2b6777',
         borderWidth: 2,
   },
   form: {

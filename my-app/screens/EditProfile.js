@@ -1,8 +1,10 @@
 import React, {useState,useEffect} from 'react'
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet, Alert } from 'react-native';
 // import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'expo-image-picker';
-import {firebase}  from '../firebase'
+import { auth, fireStoreDB } from '../firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 export default EditProfile = () => {
@@ -12,8 +14,10 @@ export default EditProfile = () => {
   const [email, setEmail] = useState ('');
   const [phoneNumber,setphoneNumber] = useState ('');
   const [image, setImage] = useState (null);
+    const [currentUser, setCurrentUser] = useState();
   const [UserProfile, setUserProfile] = useState(null);
     const navigation = useNavigation()
+    const [uID, setuID] = useState();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -28,75 +32,96 @@ export default EditProfile = () => {
 
   };
 
-  useEffect(() => {
-    const uid = firebase.auth().currentUser.uid;
-    firebase.firestore().collection('users').doc(uid).get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          const { fName, Lname, email, phoneNumber, address } = snapshot.data();
-          setfName(fName);
-          setLname(Lname);
-          setEmail(email);
-          setphoneNumber(phoneNumber);
-          // setAddress(address);
-        } else {
-          console.log('User does not exist');
+  const handleDelete = async () => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete your profile?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+     try {
+    const userRef = doc(fireStoreDB, "users", uID);
+    await deleteDoc(userRef);
+    await LoggedInUser.delete(); // This will delete the user from Firebase authentication
+    navigation.replace('Login');
+  } catch (error) {
+    console.error("Error deleting document: ", error);
+  }
+},
+style: "destructive"
         }
-      })
-      .catch((error) => {
-        console.log('Error fetching user data:', error);
-      });
-  }, []);
+      ]
+    );
+  };
+  
+  const fireAuth = auth;
+  const LoggedInUser = fireAuth.currentUser;
 
-  // useEffect(() => {
-  //   const uid = firebase.auth().currentUser.uid;
-  //   firebase.firestore().collection('users').doc(uid)
-  //     .onSnapshot((snapshot) => {
-  //       const { fName, Lname, email, phoneNumber, address } = snapshot.data();
-  //       setfName(fName);
-  //       setLname(Lname);
-  //       setEmail(email);
-  //       setphoneNumber(phoneNumber);
-  //       // setAddress(address);
-  //     });
-  // }, []);
+  const getUser = async () => {
+    const userRef = collection(fireStoreDB, "users");
+  // Create a query against the collection.
+    const user = query(userRef, where("userId", "==", LoggedInUser.uid));
+    const querySnapshot = await getDocs(user);
+    let returnedUser = {};
+    querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
 
-  const handleLogout = () => {
-    firebase.auth().signOut();
+      returnedUser = {id: doc.id, data: doc.data()};
+    });
+    console.log(returnedUser.data);
+    setuID(returnedUser.id)
+    setCurrentUser(returnedUser.data)
+    console.log("=================================");
+    setEmail(returnedUser.data.email);
+    setfName(returnedUser.data.fName);
+    setphoneNumber(returnedUser.data.phoneNumber);
+    setLname(returnedUser.data.Lname);
+  }
+  useEffect( () => {
+    getUser();
+    const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
+        if(!user) {
+            navigation.replace('Login');
+        }
+    })
+    return unsubscribe
+  }, [])
+  const handleSave = async () => {
+    await onSubmit({ fName, Lname, phoneNumber});
+    setfName('');
+    setLname('');
+    setphoneNumber('');
   };
 
-  const handleSave = () => {
-    const uid = firebase.auth().currentUser.uid;
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .update({
-        fName,
-        Lname,
-        phoneNumber,
-      })
-      .then(() => {
-        console.log('User data updated successfully!');
-        setUserProfile({ ...UserProfile, fName, Lname, phoneNumber });
+
+  const onSubmit = async () => {
+    console.log({fName, Lname, phoneNumber});
+    try {
+        const docRef = await updateDoc(doc(fireStoreDB, "users", uID), 
+        {
+          fName: fName,
+          Lname: Lname,
+          email: email,
+          phoneNumber: phoneNumber,
+        });
+        console.log("Document edited");
         navigation.navigate('UserProfile');
-      })
-      .catch((error) => {
-        console.log('Error updating user data:', error);
-      });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   };
+
 
   return (
   <ScrollView>
     <View style={styles.container}>
       <View style={styles.header}></View>
-      {/* <Image
-        style={styles.avatar}
-        source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }}
-        
-      />
-           */}
- <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
+       <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
           {image ? (
             <Image source={{ uri: image }} style={styles.avatar} />
           ) : (
@@ -106,32 +131,36 @@ export default EditProfile = () => {
 
       <View style={styles.body}>
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>{fName} {Lname}</Text>
-      
+          <Text style={styles.name}>{fName + ' ' + Lname}</Text>
           <View style={styles.btn}>
             <TouchableOpacity 
             style={[styles.buttonOutLine, styles.buttonContainer]}
             onPress={handleSave}
             >
-              <Text>Save</Text>
+              <Text style={styles.buttonOutlineText}>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonOutLine, styles.logoutButtonContainer]}
-                  onPress={handleLogout}>
-              <Text>Logout</Text>
+            <TouchableOpacity style={[styles.lgbuttonOutLine, styles.logoutButtonContainer]}
+                  onPress={handleDelete}>
+              <Text style={styles.lgbuttonOutlineText}>Delete</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.form}>
             <View style={styles.container1}>
-                <Text style={styles.questions}>Name : </Text>
+                <Text style={styles.questions}>First Name : </Text>
                 <View style={styles.textcontainer}>
                   <TextInput 
                   style={styles.paragraph} 
-                  value={`${fName} ${Lname}`}
-                  onChangeText={(text) => {
-                    const [firstName, lastName] = text.split(' ');
-                    setfName(firstName);
-                    setLname(lastName);
-                  }} />
+                  value={fName}
+                  onChangeText={setfName}
+                 />
+                </View>
+                <Text style={styles.questions}>Last Name : </Text>
+                <View style={styles.textcontainer}>
+                  <TextInput 
+                  style={styles.paragraph} 
+                  value={Lname}
+                  onChangeText={setLname}
+                  />
                 </View>
                 <Text style={styles.questions}>Email : </Text>
                 <View style={styles.textcontainer}>
@@ -145,10 +174,6 @@ export default EditProfile = () => {
                   onChangeText={setphoneNumber}
                  />
                 </View>
-                {/* <Text style={styles.questions}>Address : </Text>
-                <View style={styles.textcontainer}>
-                  <TextInput style={styles.paragraph}>{address}</TextInput>
-                </View>  */}
             </View>   
           </View>
         </View>
@@ -161,9 +186,20 @@ export default EditProfile = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#2b6777',
     height: 200,
   },
+  lgbuttonOutlineText:{
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16
+  },
+
+  buttonOutlineText:{
+    color: '#2b6777',
+    fontWeight: '700',
+    fontSize: 16
+  }, 
   avatar: {
     width: 130,
     height: 130,
@@ -240,7 +276,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: 150,
     borderRadius: 10,
-    backgroundColor: '#10B981',
+    backgroundColor: 'red',
   },
 
   btn: {
@@ -255,7 +291,13 @@ const styles = StyleSheet.create({
   buttonOutLine: {
     backgroundColor: 'white',
         marginTop: 5,
-        borderColor: '#10B981',
+        borderColor: '#2b6777',
+        borderWidth: 2,
+  },
+  lgbuttonOutLine: {
+    backgroundColor: 'white',
+        marginTop: 5,
+        borderColor: '#b5443c',
         borderWidth: 2,
   },
   form: {

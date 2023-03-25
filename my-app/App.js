@@ -18,17 +18,21 @@ import EditProfile from './screens/EditProfile';
 import Login from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import UserProfile from './screens/UserProfile';
+import SplashScreen from './screens/SpashScreen';
 
 
 export default function App() {
+
   const [initilizing, setInitilizing] = useState(true);
   const [user, setUser] = useState();
   const Stack = createNativeStackNavigator();
 
 
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen options={{headerShown: false}} name= "SplashScreen" screenOptions={{ headerShown: false }} component={SplashScreen}/>
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />  
@@ -39,8 +43,8 @@ export default function App() {
         />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="AdminHome" component={AdminHomeScreen} />        
-      <Stack.Screen options={{headerShown: false}} name='EditProfile' component={EditProfile} />
-      <Stack.Screen options={{headerShown: false}} name='UserProfile' component={UserProfile} />      
+      <Stack.Screen name='EditProfile' component={EditProfile} />
+      <Stack.Screen name='UserProfile' component={UserProfile} />      
 
         
       </Stack.Navigator>
