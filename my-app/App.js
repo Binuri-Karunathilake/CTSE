@@ -19,7 +19,7 @@ import FeedbackScreen from './screens/Feedback';
 export default function App() {
   return (
     <NavigationContainer>
-      <ShoppingCartScreen/>
+      <CheckoutScreen/>
     </NavigationContainer>
   );
 }

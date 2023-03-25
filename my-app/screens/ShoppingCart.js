@@ -54,7 +54,7 @@ const ShoppingCartScreen = () => {
         renderItem={renderCartItem}
         contentContainerStyle={styles.cartList}
       />
-      <Button title="Checkout" onPress={() => alert('Checkout button pressed')} />
+      <Button title="Checkout" onPress={() => alert('Are you sure want to continue?')} />
     </View>
   );
 };
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  
 });
 
 export default ShoppingCartScreen;
