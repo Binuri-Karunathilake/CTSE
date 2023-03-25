@@ -23,37 +23,20 @@ const RegisterScreen = () => {
 
 
     registerUser = async (fName, Lname, email, phoneNumber, password) => {
-        // await firebase.auth().createUserWithEmailAndPassword(email, password)
-        //   .then(() => {
-        //     firebase.auth().currentUser.sendEmailVerification({
+        // try {
+        //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        //     const user = userCredential.user;
+        
+        //     // Send email verification
+        //     await sendEmailVerification(user, {
+        //       url: "https://reactapp-cea8f.firebaseapp.com",
         //       handleCodeInApp: true,
-        //       url: 'https://reactapp-cea8f.firebaseapp.com',
-        //     })
-        //       .then(() => {
-        //         alert('Verification email sent')
-        //       }).catch((error) => {
-        //         alert(error.message)
-        //       })
-        //       .then(() => {
-        //         firebase.firestore().collection('users')
-        //           .doc(firebase.auth().currentUser.uid)
-        //           .set({
-        //             fName,
-        //             Lname,
-        //             email,
-        //             phoneNumber,
-        //           })
-        //       })
-        //       .catch((error) => {
-        //         alert(error.message)
-        //       })
-        //   })
-        //   .catch((error => {
-        //     alert(error.message)
-        //   }))
+        //     });
+        //     alert("Verification email sent");
         try {
           const regUser = await createUserWithEmailAndPassword(auth, email, password)
           console.log(regUser.user.uid);
+          // Store user data in Firestore
           const docRef = await addDoc(collection(fireStoreDB, "users"), 
           {
             userId: regUser.user.uid,
