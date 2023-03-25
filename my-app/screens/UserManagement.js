@@ -46,7 +46,6 @@ const UserList = () => {
 
   return (
       <View>
-      <Text> {"\n"}  {"\n"}  {"\n"}</Text>
 
       <FlatList
         data={ShippingInfo}

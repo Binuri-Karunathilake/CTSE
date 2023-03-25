@@ -5,7 +5,7 @@ class SplashScreen extends Component {
   componentDidMount() {
     setTimeout(() => {
       // Replace 'Home' with the name of your app's main screen
-      this.props.navigation.navigate('Login');
+      this.props.navigation.replace('Login');
     }, 3000);
   }
 
