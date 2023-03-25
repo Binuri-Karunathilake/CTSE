@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
@@ -5,10 +6,12 @@ const PaymentScreen = () => {
   const [cardNumber, setCardNumber] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
+  const navigation = useNavigation();
 
   const handlePayment = () => {
     // handle payment
     alert('Payment successful! Thank you for your order');
+    navigation.navigate('UserViewProductDetails');
   };
 
   return (

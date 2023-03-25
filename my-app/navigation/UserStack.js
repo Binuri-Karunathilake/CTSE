@@ -10,6 +10,10 @@ import EditShippingDetails from '../screens/EditShippingDetails';
 import ViewShippingDetails from '../screens/ViewShippingDetails';
 import ProductDetails from '../screens/ProductDetails';
 import { MaterialIcons } from '@expo/vector-icons';
+import ShoppingCartScreen from '../screens/ShoppingCart';
+import HelpScreen from '../screens/ShoppingHelp';
+import CheckoutScreen from '../screens/Checkout';
+import PaymentScreen from '../screens/Payment';
 
 const UserStack = () => {
 
@@ -40,6 +44,15 @@ const UserStack = () => {
         <Tab.Screen name='EditShippingDetails' component={EditShippingDetails} options={{
                   tabBarItemStyle: { display: 'none' }, title: 'Shipping Details'
         }} />
+        <Tab.Screen name='ShoppingCartScreen' component={ShoppingCartScreen} options={{
+                   title: 'Shopping Cart'
+        }}/><Tab.Screen name='HelpScreen' component={HelpScreen} options={{
+            tabBarItemStyle: { display: 'none' }, title: 'Help'
+  }}/><Tab.Screen name='CheckoutScreen' component={CheckoutScreen} options={{
+    tabBarItemStyle: { display: 'none' }, title: 'Checkout'
+}}/><Tab.Screen name='PaymentScreen' component={PaymentScreen} options={{
+    tabBarItemStyle: { display: 'none' }, title: 'Payment'
+}}/>
     </Tab.Navigator>
   )
 }

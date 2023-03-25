@@ -1,5 +1,7 @@
+import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // state to hold cart items, initialized with some example items
@@ -8,13 +10,15 @@ const ShoppingCartScreen = () => {
     { id: '1', name: 'Item 1', price: 10, quantity: 1 },
     { id: '2', name: 'Item 2', price: 20, quantity: 1 },
     { id: '3', name: 'Item 3', price: 30, quantity: 1 },
-    { id: '1', name: 'Item 1', price: 10, quantity: 1 },
-    { id: '2', name: 'Item 2', price: 20, quantity: 1 },
-    { id: '3', name: 'Item 3', price: 30, quantity: 1 },
-    { id: '1', name: 'Item 1', price: 10, quantity: 1 },
-    { id: '2', name: 'Item 2', price: 20, quantity: 1 },
-    { id: '3', name: 'Item 3', price: 30, quantity: 1 },
+    { id: '4', name: 'Item 1', price: 10, quantity: 1 },
+    { id: '5', name: 'Item 2', price: 20, quantity: 1 },
+    { id: '6', name: 'Item 3', price: 30, quantity: 1 },
+    { id: '7', name: 'Item 1', price: 10, quantity: 1 },
+    { id: '8', name: 'Item 2', price: 20, quantity: 1 },
+    { id: '9', name: 'Item 3', price: 30, quantity: 1 },
   ]);
+
+  const navigation = useNavigation();
 
   //update the quantity of a cart item
   const handleUpdateItem = (itemId, newQuantity) => {
@@ -32,6 +36,25 @@ const ShoppingCartScreen = () => {
       return prevItems.filter(item => item.id !== itemId);
     });
   };
+
+  const handleCheckout = () => {
+    Alert.alert(
+      "Checkout",
+      "Are you sure you want to checkout",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { 
+          text: "Yes, I am Sure", 
+          onPress: () => {navigation.navigate('CheckoutScreen')}, 
+          style: "destructive" 
+        }
+      ],
+      { cancelable: true }
+    );
+  }
 
  //render a single cart item
   const renderCartItem = ({ item }) => {
@@ -64,7 +87,7 @@ const ShoppingCartScreen = () => {
         renderItem={renderCartItem}
         contentContainerStyle={styles.cartList}
       />
-      <TouchableOpacity style={styles.checkoutButton} onPress={() => alert('Are you sure you want to continue?')}>
+      <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
         <Text style={styles.checkoutButtonText}>Checkout</Text>
       </TouchableOpacity>
     </View>

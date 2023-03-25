@@ -1,15 +1,33 @@
+import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 
 const CheckoutScreen = () => {
 // Declare variables for the input fields
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
+  const navigation = useNavigation();
 
 // Function to handle the checkout button press
   const handleCheckout = () => {
-    alert(`Are you sure want to continue!`);
+    Alert.alert(
+      "Checkout",
+      "Are you sure you want to continue",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { 
+          text: "Yes, I am Sure", 
+          onPress: () => {navigation.navigate('PaymentScreen')}, 
+          style: "destructive" 
+        }
+      ],
+      { cancelable: true }
+    );
   };
 //   const handleCheckout = () => {
 //     alert(`Thank you for your order, ${firstName} ${lastName}!`);
